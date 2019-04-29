@@ -102,7 +102,7 @@ class BASE_EXPORT TimeDelta {
 
   // Returns true if the time delta is the maximum time delta.
   bool is_max() const {
-    return delta_ == std::numeric_limits<int64>::max();
+	  return delta_ == (std::numeric_limits<int64>::max)();
   }
 
 #if defined(OS_POSIX)
@@ -281,7 +281,7 @@ class BASE_EXPORT Time {
 
   // Returns true if the time object is the maximum time.
   bool is_max() const {
-    return us_ == std::numeric_limits<int64>::max();
+    return us_ == (std::numeric_limits<int64>::max)();
   }
 
   // Returns the time for epoch in Unix-like system (Jan 1, 1970).
@@ -505,7 +505,7 @@ class BASE_EXPORT Time {
 // static
 inline TimeDelta TimeDelta::FromDays(int days) {
   // Preserve max to prevent overflow.
-  if (days == std::numeric_limits<int>::max())
+  if (days == (std::numeric_limits<int>::max)())
     return Max();
   return TimeDelta(days * Time::kMicrosecondsPerDay);
 }
@@ -513,7 +513,7 @@ inline TimeDelta TimeDelta::FromDays(int days) {
 // static
 inline TimeDelta TimeDelta::FromHours(int hours) {
   // Preserve max to prevent overflow.
-  if (hours == std::numeric_limits<int>::max())
+  if (hours == (std::numeric_limits<int>::max)())
     return Max();
   return TimeDelta(hours * Time::kMicrosecondsPerHour);
 }
@@ -521,7 +521,7 @@ inline TimeDelta TimeDelta::FromHours(int hours) {
 // static
 inline TimeDelta TimeDelta::FromMinutes(int minutes) {
   // Preserve max to prevent overflow.
-  if (minutes == std::numeric_limits<int>::max())
+  if (minutes == (std::numeric_limits<int>::max)())
     return Max();
   return TimeDelta(minutes * Time::kMicrosecondsPerMinute);
 }
@@ -529,7 +529,7 @@ inline TimeDelta TimeDelta::FromMinutes(int minutes) {
 // static
 inline TimeDelta TimeDelta::FromSeconds(int64 secs) {
   // Preserve max to prevent overflow.
-  if (secs == std::numeric_limits<int64>::max())
+  if (secs == (std::numeric_limits<int64>::max)())
     return Max();
   return TimeDelta(secs * Time::kMicrosecondsPerSecond);
 }
@@ -537,7 +537,7 @@ inline TimeDelta TimeDelta::FromSeconds(int64 secs) {
 // static
 inline TimeDelta TimeDelta::FromMilliseconds(int64 ms) {
   // Preserve max to prevent overflow.
-  if (ms == std::numeric_limits<int64>::max())
+  if (ms == (std::numeric_limits<int64>::max)())
     return Max();
   return TimeDelta(ms * Time::kMicrosecondsPerMillisecond);
 }
@@ -561,7 +561,7 @@ inline TimeDelta TimeDelta::FromMillisecondsD(double ms) {
 // static
 inline TimeDelta TimeDelta::FromMicroseconds(int64 us) {
   // Preserve max to prevent overflow.
-  if (us == std::numeric_limits<int64>::max())
+  if (us == (std::numeric_limits<int64>::max)())
     return Max();
   return TimeDelta(us);
 }

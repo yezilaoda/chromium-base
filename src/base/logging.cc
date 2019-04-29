@@ -7,6 +7,9 @@
 #if defined(OS_WIN)
 #include <io.h>
 #include <windows.h>
+
+#include <chrono>
+
 typedef HANDLE FileHandle;
 typedef HANDLE MutexHandle;
 // Windows warns on using write().  It prefers _write().
@@ -74,7 +77,7 @@ VlogInfo* g_vlog_info = NULL;
 VlogInfo* g_vlog_info_prev = NULL;
 
 const char* const log_severity_names[LOG_NUM_SEVERITIES] = {
-  "INFO", "WARNING", "ERROR", "FATAL" };
+  "", " WARNING", " ERROR", " FATAL" };
 
 const char* log_severity_name(int severity) {
   if (severity >= 0 && severity < LOG_NUM_SEVERITIES)
@@ -358,22 +361,22 @@ bool BaseInitLoggingImpl(const LoggingSettings& settings) {
   // Can log only to the system debug log.
   CHECK_EQ(settings.logging_dest & ~LOG_TO_SYSTEM_DEBUG_LOG, 0);
 #endif
-  base::CommandLine* command_line = base::CommandLine::ForCurrentProcess();
-  // Don't bother initializing g_vlog_info unless we use one of the
-  // vlog switches.
-  if (command_line->HasSwitch(switches::kV) ||
-      command_line->HasSwitch(switches::kVModule)) {
-    // NOTE: If g_vlog_info has already been initialized, it might be in use
-    // by another thread. Don't delete the old VLogInfo, just create a second
-    // one. We keep track of both to avoid memory leak warnings.
-    CHECK(!g_vlog_info_prev);
-    g_vlog_info_prev = g_vlog_info;
-
-    g_vlog_info =
-        new VlogInfo(command_line->GetSwitchValueASCII(switches::kV),
-                     command_line->GetSwitchValueASCII(switches::kVModule),
-                     &min_log_level);
-  }
+//   base::CommandLine* command_line = base::CommandLine::ForCurrentProcess();
+//   // Don't bother initializing g_vlog_info unless we use one of the
+//   // vlog switches.
+//   if (command_line->HasSwitch(switches::kV) ||
+//       command_line->HasSwitch(switches::kVModule)) {
+//     // NOTE: If g_vlog_info has already been initialized, it might be in use
+//     // by another thread. Don't delete the old VLogInfo, just create a second
+//     // one. We keep track of both to avoid memory leak warnings.
+//     CHECK(!g_vlog_info_prev);
+//     g_vlog_info_prev = g_vlog_info;
+// 
+//     g_vlog_info =
+//         new VlogInfo(command_line->GetSwitchValueASCII(switches::kV),
+//                      command_line->GetSwitchValueASCII(switches::kVModule),
+//                      &min_log_level);
+//   }
 
   logging_destination = settings.logging_dest;
 
@@ -657,22 +660,13 @@ void LogMessage::Init(const char* file, int line) {
   if (log_thread_id)
     stream_ << base::PlatformThread::CurrentId() << ':';
   if (log_timestamp) {
-    time_t t = time(NULL);
-    struct tm local_time = {0};
-#ifdef _MSC_VER
-    localtime_s(&local_time, &t);
-#else
-    localtime_r(&t, &local_time);
-#endif
-    struct tm* tm_time = &local_time;
-    stream_ << std::setfill('0')
-            << std::setw(2) << 1 + tm_time->tm_mon
-            << std::setw(2) << tm_time->tm_mday
-            << '/'
-            << std::setw(2) << tm_time->tm_hour
-            << std::setw(2) << tm_time->tm_min
-            << std::setw(2) << tm_time->tm_sec
-            << ':';
+	auto t = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+	//×ªÎª×Ö·û´®
+	std::stringstream ss;
+	ss << std::put_time(std::localtime(&t), "%F %T");
+
+	stream_ << ss.str().c_str();
+		
   }
   if (log_tickcount)
     stream_ << TickCount() << ':';
@@ -681,7 +675,8 @@ void LogMessage::Init(const char* file, int line) {
   else
     stream_ << "VERBOSE" << -severity_;
 
-  stream_ << ":" << filename << "(" << line << ")] ";
+  //stream_ << ":" << filename << "(" << line << ")] ";
+  stream_ << "]";
 
   message_start_ = stream_.str().length();
 }

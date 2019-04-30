@@ -36,7 +36,7 @@
   <PropertyGroup>
     <ExecutablePath>$(ExecutablePath);$(MSBuildProjectDirectory)\.\bin\;$(MSBuildProjectDirectory)\.\bin\</ExecutablePath>
     <IntDir>$(Configuration)\obj\$(ProjectName)\</IntDir>
-    <OutDir>..\..\..\RPA\RpaSolution\third_party\chromium-base\</OutDir>
+    <OutDir>..\..\lib\third_party\chromium-base\</OutDir>
     <TargetName>$(ProjectName)</TargetName>
     <TargetPath>$(OutDir)lib\$(ProjectName)$(TargetExt)</TargetPath>
   </PropertyGroup>
@@ -83,10 +83,9 @@
       <TreatWarningAsError>false</TreatWarningAsError>
       <WarningLevel>Level4</WarningLevel>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <ProgramDataBaseFileName>$(OutDir)$(TargetName).pdb</ProgramDataBaseFileName>
     </ClCompile>
-    <Lib>
-      <OutputFile>$(OutDir)lib\$(ProjectName)$(TargetExt)</OutputFile>
-    </Lib>
+    <Lib />
     <Link>
       <AdditionalDependencies>advapi32.lib;dbgHelp.lib;ole32.lib;shell32.lib;user32.lib;ws2_32.lib</AdditionalDependencies>
       <GenerateDebugInformation>false</GenerateDebugInformation>

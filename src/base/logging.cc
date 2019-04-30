@@ -161,19 +161,20 @@ void DeleteFilePath(const PathString& log_name) {
 #endif
 }
 
+
 PathString GetDefaultLogFile() {
 #if defined(OS_WIN)
   // On Windows we use the same path as the exe.
   wchar_t module_name[MAX_PATH];
   GetModuleFileName(NULL, module_name, MAX_PATH);
 
-  PathString log_file = module_name;
+  PathString log_file_str = module_name;
   PathString::size_type last_backslash =
-      log_file.rfind('\\', log_file.size());
+      log_file_str.rfind('\\', log_file_str.size());
   if (last_backslash != PathString::npos)
-    log_file.erase(last_backslash + 1);
-  log_file += L"debug.log";
-  return log_file;
+    log_file_str.erase(last_backslash + 1);
+  log_file_str += L"debug.log";
+  return log_file_str;
 #elif defined(OS_POSIX)
   // On other platforms we just use the current directory.
   return PathString("debug.log");

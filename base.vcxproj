@@ -98,6 +98,9 @@
       <Command>
       </Command>
     </PostBuildEvent>
+    <Lib>
+      <OutputFile>$(OutDir)lib\$(ProjectName)$(TargetExt)</OutputFile>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="src\base\third_party\dynamic_annotations\LICENSE" />

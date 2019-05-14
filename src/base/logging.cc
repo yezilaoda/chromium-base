@@ -1,4 +1,4 @@
-// Copyright (c) 2012 The Chromium Authors. All rights reserved.
+﻿// Copyright (c) 2012 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
@@ -662,7 +662,7 @@ void LogMessage::Init(const char* file, int line) {
     stream_ << base::PlatformThread::CurrentId() << ':';
   if (log_timestamp) {
 	auto t = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-	//תΪ�ַ���
+	//转为字符串
 	std::stringstream ss;
 	ss << std::put_time(std::localtime(&t), "%F %T");
 
@@ -803,5 +803,5 @@ std::wstring GetLogFileFullPath() {
 }  // namespace logging
 
 std::ostream& std::operator<<(std::ostream& out, const wchar_t* wstr) {
-  return out << base::WideToUTF8(wstr);
+	return out << (wstr ? base::WideToUTF8(wstr) : std::string());
 }

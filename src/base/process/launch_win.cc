@@ -342,6 +342,7 @@ bool GetAppOutput(const StringPiece16& cl, std::string* output) {
   start_info.hStdInput = GetStdHandle(STD_INPUT_HANDLE);
   start_info.hStdError = GetStdHandle(STD_ERROR_HANDLE);
   start_info.dwFlags |= STARTF_USESTDHANDLES;
+  start_info.wShowWindow = SW_HIDE;
 
   // Create the child process.
   PROCESS_INFORMATION temp_process_info = {};
@@ -349,7 +350,7 @@ bool GetAppOutput(const StringPiece16& cl, std::string* output) {
                      &writable_command_line_string[0],
                      NULL, NULL,
                      TRUE,  // Handles are inherited.
-                     0, NULL, NULL, &start_info, &temp_process_info)) {
+	  CREATE_NO_WINDOW, NULL, NULL, &start_info, &temp_process_info)) {
     NOTREACHED() << "Failed to start process";
     return false;
   }

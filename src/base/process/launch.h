@@ -215,6 +215,8 @@ BASE_EXPORT void RouteStdioToConsole();
 // indicating success).
 BASE_EXPORT bool GetAppOutput(const CommandLine& cl, std::string* output);
 
+BASE_EXPORT bool GetAppOutputWithoutWindow(const CommandLine& cl, std::string* output);
+
 #if defined(OS_WIN)
 // A Windows-specific version of GetAppOutput that takes a command line string
 // instead of a CommandLine object. Useful for situations where you need to

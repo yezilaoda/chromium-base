@@ -305,6 +305,85 @@ bool GetAppOutput(const CommandLine& cl, std::string* output) {
   return GetAppOutput(cl.GetCommandLineString(), output);
 }
 
+bool GetAppOutputWithoutWindow(const CommandLine& cl, std::string* output)
+{
+	return GetAppOutput(cl.GetCommandLineString(), output);
+}
+
+bool GetAppOutputWithoutWindow(const StringPiece16& cl, std::string* output)
+{
+	HANDLE out_read = NULL;
+	HANDLE out_write = NULL;
+
+	SECURITY_ATTRIBUTES sa_attr;
+	// Set the bInheritHandle flag so pipe handles are inherited.
+	sa_attr.nLength = sizeof(SECURITY_ATTRIBUTES);
+	sa_attr.bInheritHandle = TRUE;
+	sa_attr.lpSecurityDescriptor = NULL;
+
+	// Create the pipe for the child process's STDOUT.
+	if (!CreatePipe(&out_read, &out_write, &sa_attr, 0)) {
+		NOTREACHED() << "Failed to create pipe";
+		return false;
+	}
+
+	// Ensure we don't leak the handles.
+	win::ScopedHandle scoped_out_read(out_read);
+	win::ScopedHandle scoped_out_write(out_write);
+
+	// Ensure the read handle to the pipe for STDOUT is not inherited.
+	if (!SetHandleInformation(out_read, HANDLE_FLAG_INHERIT, 0)) {
+		NOTREACHED() << "Failed to disabled pipe inheritance";
+		return false;
+	}
+
+	FilePath::StringType writable_command_line_string;
+	writable_command_line_string.assign(cl.data(), cl.size());
+
+	STARTUPINFO start_info = {};
+
+	start_info.cb = sizeof(STARTUPINFO);
+	start_info.hStdOutput = out_write;
+	// Keep the normal stdin and stderr.
+	start_info.hStdInput = GetStdHandle(STD_INPUT_HANDLE);
+	start_info.hStdError = GetStdHandle(STD_ERROR_HANDLE);
+	start_info.dwFlags |= STARTF_USESTDHANDLES;
+	start_info.wShowWindow = SW_HIDE;
+
+	// Create the child process.
+	PROCESS_INFORMATION temp_process_info = {};
+	if (!CreateProcess(NULL,
+		&writable_command_line_string[0],
+		NULL, NULL,
+		TRUE,  // Handles are inherited.
+		CREATE_NO_WINDOW, NULL, NULL, &start_info, &temp_process_info)) {
+		NOTREACHED() << "Failed to start process";
+		return false;
+	}
+	base::win::ScopedProcessInformation proc_info(temp_process_info);
+
+	// Close our writing end of pipe now. Otherwise later read would not be able
+	// to detect end of child's output.
+	scoped_out_write.Close();
+
+	// Read output from the child process's pipe for STDOUT
+	const int kBufferSize = 1024;
+	char buffer[kBufferSize];
+
+	for (;;) {
+		DWORD bytes_read = 0;
+		BOOL success = ReadFile(out_read, buffer, kBufferSize, &bytes_read, NULL);
+		if (!success || bytes_read == 0)
+			break;
+		output->append(buffer, bytes_read);
+	}
+
+	// Let's wait for the process to finish.
+	WaitForSingleObject(proc_info.process_handle(), INFINITE);
+
+	return true;
+}
+
 bool GetAppOutput(const StringPiece16& cl, std::string* output) {
   HANDLE out_read = NULL;
   HANDLE out_write = NULL;
@@ -339,10 +418,9 @@ bool GetAppOutput(const StringPiece16& cl, std::string* output) {
   start_info.cb = sizeof(STARTUPINFO);
   start_info.hStdOutput = out_write;
   // Keep the normal stdin and stderr.
-  start_info.hStdInput = GetStdHandle(STD_INPUT_HANDLE);
-  start_info.hStdError = GetStdHandle(STD_ERROR_HANDLE);
+  //start_info.hStdInput = GetStdHandle(STD_INPUT_HANDLE);
+  //start_info.hStdError = GetStdHandle(STD_ERROR_HANDLE);
   start_info.dwFlags |= STARTF_USESTDHANDLES;
-  start_info.wShowWindow = SW_HIDE;
 
   // Create the child process.
   PROCESS_INFORMATION temp_process_info = {};
@@ -350,7 +428,7 @@ bool GetAppOutput(const StringPiece16& cl, std::string* output) {
                      &writable_command_line_string[0],
                      NULL, NULL,
                      TRUE,  // Handles are inherited.
-	  CREATE_NO_WINDOW, NULL, NULL, &start_info, &temp_process_info)) {
+	  NULL, NULL, NULL, &start_info, &temp_process_info)) {
     NOTREACHED() << "Failed to start process";
     return false;
   }

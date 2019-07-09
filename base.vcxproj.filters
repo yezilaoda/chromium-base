@@ -3918,7 +3918,7 @@
     <ClCompile Include="src\third_party\superfasthash\superfasthash.c">
       <Filter>src\third_party\superfasthash</Filter>
     </ClCompile>
-    <None Include="base.gyp"/>
+    <None Include="base.gyp" />
     <ClInclude Include="src\base\atomicops_internals_mac.h">
       <Filter>src\base\_excluded_files</Filter>
     </ClInclude>
@@ -4039,5 +4039,16 @@
     <ClCompile Include="src\base\time\time_posix.cc">
       <Filter>src\base\time\_excluded_files</Filter>
     </ClCompile>
+    <ClCompile Include="src\base\file_version_info_win.cc">
+      <Filter>src\base</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\base\file_version_info.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\file_version_info_win.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

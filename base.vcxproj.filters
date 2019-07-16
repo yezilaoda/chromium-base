@@ -4042,6 +4042,15 @@
     <ClCompile Include="src\base\file_version_info_win.cc">
       <Filter>src\base</Filter>
     </ClCompile>
+    <ClCompile Include="src\base\threading\scoped_blocking_call.cc">
+      <Filter>src\base\threading</Filter>
+    </ClCompile>
+    <ClCompile Include="src\base\scoped_clear_last_error_win.cc">
+      <Filter>src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="src\base\win\resource_util.cc">
+      <Filter>src\base\win</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\base\file_version_info.h">
@@ -4049,6 +4058,15 @@
     </ClInclude>
     <ClInclude Include="src\base\file_version_info_win.h">
       <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\threading\scoped_blocking_call.h">
+      <Filter>src\base\threading</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\scoped_clear_last_error.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\win\resource_util.h">
+      <Filter>src\base\win</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

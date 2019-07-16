@@ -213,6 +213,7 @@
     <ClInclude Include="src\base\rand_util.h" />
     <ClInclude Include="src\base\run_loop.h" />
     <ClInclude Include="src\base\scoped_clear_errno.h" />
+    <ClInclude Include="src\base\scoped_clear_last_error.h" />
     <ClInclude Include="src\base\sequence_checker.h" />
     <ClInclude Include="src\base\sequence_checker_impl.h" />
     <ClInclude Include="src\base\sequenced_task_runner.h" />
@@ -242,6 +243,7 @@
     <ClInclude Include="src\base\third_party\nspr\prtime.h" />
     <ClInclude Include="src\base\third_party\valgrind\memcheck.h" />
     <ClInclude Include="src\base\third_party\valgrind\valgrind.h" />
+    <ClInclude Include="src\base\threading\scoped_blocking_call.h" />
     <ClInclude Include="src\base\thread_task_runner_handle.h" />
     <ClInclude Include="src\base\threading\non_thread_safe.h" />
     <ClInclude Include="src\base\threading\non_thread_safe_impl.h" />
@@ -267,6 +269,7 @@
     <ClInclude Include="src\base\win\object_watcher.h" />
     <ClInclude Include="src\base\win\pe_image.h" />
     <ClInclude Include="src\base\win\registry.h" />
+    <ClInclude Include="src\base\win\resource_util.h" />
     <ClInclude Include="src\base\win\scoped_handle.h" />
     <ClInclude Include="src\base\win\scoped_process_information.h" />
     <ClInclude Include="src\base\win\startup_information.h" />
@@ -377,6 +380,7 @@
     <ClCompile Include="src\base\rand_util.cc" />
     <ClCompile Include="src\base\rand_util_win.cc" />
     <ClCompile Include="src\base\run_loop.cc" />
+    <ClCompile Include="src\base\scoped_clear_last_error_win.cc" />
     <ClCompile Include="src\base\sequence_checker_impl.cc" />
     <ClCompile Include="src\base\sequenced_task_runner.cc" />
     <ClCompile Include="src\base\strings\string_number_conversions.cc" />
@@ -402,6 +406,7 @@
     <ClCompile Include="src\base\third_party\icu\icu_utf.cc" />
     <ClCompile Include="src\base\third_party\nspr\prtime.cc" />
     <ClCompile Include="src\base\third_party\xdg_user_dirs\xdg_user_dir_lookup.cc" />
+    <ClCompile Include="src\base\threading\scoped_blocking_call.cc" />
     <ClCompile Include="src\base\thread_task_runner_handle.cc" />
     <ClCompile Include="src\base\threading\non_thread_safe_impl.cc" />
     <ClCompile Include="src\base\threading\platform_thread_win.cc" />
@@ -429,6 +434,7 @@
     <ClCompile Include="src\base\win\object_watcher.cc" />
     <ClCompile Include="src\base\win\pe_image.cc" />
     <ClCompile Include="src\base\win\registry.cc" />
+    <ClCompile Include="src\base\win\resource_util.cc" />
     <ClCompile Include="src\base\win\scoped_handle.cc" />
     <ClCompile Include="src\base\win\scoped_process_information.cc" />
     <ClCompile Include="src\base\win\startup_information.cc" />

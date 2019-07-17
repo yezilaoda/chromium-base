@@ -49,7 +49,7 @@ VS_FIXEDFILEINFO* GetVsFixedFileInfo(const void* data) {
 FileVersionInfoWin::~FileVersionInfoWin() = default;
 
 // static
-FileVersionInfo* FileVersionInfo::CreateFileVersionInfoForModule(
+FileVersionInfoWin* FileVersionInfoWin::CreateFileVersionInfoForModule(
     HMODULE module) {
   void* data;
   size_t version_info_length;
@@ -67,7 +67,7 @@ FileVersionInfo* FileVersionInfo::CreateFileVersionInfoForModule(
 }
 
 // static
-FileVersionInfo* FileVersionInfo::CreateFileVersionInfo(
+FileVersionInfoWin* FileVersionInfoWin::CreateFileVersionInfo(
     const FilePath& file_path) {
   base::ScopedBlockingCall scoped_blocking_call(base::BlockingType::MAY_BLOCK);
 

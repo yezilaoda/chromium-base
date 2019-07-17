@@ -24,6 +24,24 @@ class BASE_EXPORT FileVersionInfoWin : public FileVersionInfo {
  public:
   ~FileVersionInfoWin() override;
 
+#if defined(OS_WIN) || defined(OS_MACOSX)
+  // Creates a FileVersionInfo for the specified path. Returns NULL if something
+  // goes wrong (typically the file does not exit or cannot be opened). The
+  // returned object should be deleted when you are done with it.
+  static FileVersionInfoWin* CreateFileVersionInfo(
+	  const base::FilePath& file_path);
+#endif  // OS_WIN || OS_MACOSX
+
+#if defined(OS_WIN)
+  // Creates a FileVersionInfo for the specified module. Returns NULL in case
+  // of error. The returned object should be deleted when you are done with it.
+  static FileVersionInfoWin* CreateFileVersionInfoForModule(HMODULE module);
+#else
+  // Creates a FileVersionInfo for the current module. Returns NULL in case
+  // of error. The returned object should be deleted when you are done with it.
+  static FileVersionInfoWin* CreateFileVersionInfoForCurrentModule();
+#endif  // OS_WIN
+
   // Accessors to the different version properties.
   // Returns an empty string if the property is not found.
   base::string16 company_name() override;

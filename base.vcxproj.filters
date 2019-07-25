@@ -3001,6 +3001,9 @@
     <Filter Include="src\base\time\_excluded_files">
       <UniqueIdentifier>{158E591E-B6EA-0C85-8F5A-18EAFA09B4CE}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\base\third_party\modp_b64">
+      <UniqueIdentifier>{fddb7e6f-721c-4e5d-a1fa-fdf4b6cf10c9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\base\at_exit.cc">
@@ -4051,6 +4054,12 @@
     <ClCompile Include="src\base\win\resource_util.cc">
       <Filter>src\base\win</Filter>
     </ClCompile>
+    <ClCompile Include="src\base\third_party\modp_b64\modp_b64.cc">
+      <Filter>src\base\third_party\modp_b64</Filter>
+    </ClCompile>
+    <ClCompile Include="src\base\base64.cc">
+      <Filter>src\base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\base\file_version_info.h">
@@ -4067,6 +4076,15 @@
     </ClInclude>
     <ClInclude Include="src\base\win\resource_util.h">
       <Filter>src\base\win</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\third_party\modp_b64\modp_b64.h">
+      <Filter>src\base\third_party\modp_b64</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\third_party\modp_b64\modp_b64_data.h">
+      <Filter>src\base\third_party\modp_b64</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\base64.h">
+      <Filter>src\base</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

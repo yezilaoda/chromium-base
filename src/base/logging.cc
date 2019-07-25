@@ -115,7 +115,7 @@ namespace logging {
 		VlogInfo* g_vlog_info = nullptr;
 		VlogInfo* g_vlog_info_prev = nullptr;
 
-		const char* const log_severity_names[] = { "INFO", "WARNING", "ERROR", "FATAL" };
+		const char* const log_severity_names[] = { "", "WARNING", "ERROR", "FATAL" };
 		static_assert(LOG_NUM_SEVERITIES == base::size(log_severity_names),
 			"Incorrect number of log_severity_names");
 
@@ -585,7 +585,7 @@ namespace logging {
 	}
 
 	LogMessage::~LogMessage() {
-		size_t stack_start = stream_.tellp();
+		//size_t stack_start = stream_.tellp();
 #if !defined(OFFICIAL_BUILD) && !defined(OS_NACL) && !defined(__UCLIBC__) && \
     !defined(OS_AIX)
 		if (severity_ == LOG_FATAL && !base::debug::BeingDebugged()) {
@@ -903,16 +903,20 @@ namespace logging {
 			SYSTEMTIME local_time;
 			GetLocalTime(&local_time);
 			stream_ << std::setfill('0')
+				<< std::setw(2) << local_time.wYear
+				<< '-'
 				<< std::setw(2) << local_time.wMonth
+				<< '-'
 				<< std::setw(2) << local_time.wDay
-				<< '/'
+				<< ' '
 				<< std::setw(2) << local_time.wHour
+				<< ':'
 				<< std::setw(2) << local_time.wMinute
+				<< ':'
 				<< std::setw(2) << local_time.wSecond
 				<< '.'
 				<< std::setw(3)
-				<< local_time.wMilliseconds
-				<< ':';
+				<< local_time.wMilliseconds;
 #elif defined(OS_POSIX) || defined(OS_FUCHSIA)
 			timeval tv;
 			gettimeofday(&tv, nullptr);
@@ -941,8 +945,8 @@ namespace logging {
 		else
 			stream_ << "VERBOSE" << -severity_;
 
-		stream_ << ":" << filename << "(" << line << ")] ";
-
+		//stream_ << ":" << filename << "(" << line << ")] ";
+		stream_ << "]";
 		message_start_ = stream_.str().length();
 	}
 

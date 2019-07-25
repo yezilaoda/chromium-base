@@ -4125,5 +4125,8 @@
     <ClInclude Include="src\base\thread_annotations.h">
       <Filter>src\base</Filter>
     </ClInclude>
+    <ClInclude Include="src\base\win\windows_types.h">
+      <Filter>src\base\win</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

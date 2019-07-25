@@ -288,6 +288,7 @@
     <ClInclude Include="src\base\win\scoped_handle.h" />
     <ClInclude Include="src\base\win\scoped_process_information.h" />
     <ClInclude Include="src\base\win\startup_information.h" />
+    <ClInclude Include="src\base\win\windows_types.h" />
     <ClInclude Include="src\base\win\windows_version.h" />
     <ClInclude Include="src\base\win\wrapped_window_proc.h" />
     <ClInclude Include="src\build\build_config.h" />

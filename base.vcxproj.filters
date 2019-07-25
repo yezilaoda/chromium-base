@@ -3004,6 +3004,9 @@
     <Filter Include="src\base\third_party\modp_b64">
       <UniqueIdentifier>{fddb7e6f-721c-4e5d-a1fa-fdf4b6cf10c9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\numerics">
+      <UniqueIdentifier>{f737acbc-2795-41a2-b865-c99df7b86cff}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\base\at_exit.cc">
@@ -4084,6 +4087,42 @@
       <Filter>src\base\third_party\modp_b64</Filter>
     </ClInclude>
     <ClInclude Include="src\base\base64.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\strings\string_piece_forward.h">
+      <Filter>src\base\strings</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\containers\stack.h">
+      <Filter>src\base\containers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\containers\circular_deque.h">
+      <Filter>src\base\containers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\containers\vector_buffer.h">
+      <Filter>src\base\containers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\containers\util.h">
+      <Filter>src\base\containers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\numerics\checked_math.h">
+      <Filter>src\numerics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\numerics\checked_math_impl.h">
+      <Filter>src\numerics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\numerics\safe_conversions.h">
+      <Filter>src\numerics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\numerics\safe_conversions_impl.h">
+      <Filter>src\numerics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\numerics\safe_math_shared_impl.h">
+      <Filter>src\numerics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\optional.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\thread_annotations.h">
       <Filter>src\base</Filter>
     </ClInclude>
   </ItemGroup>

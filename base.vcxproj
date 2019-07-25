@@ -136,12 +136,16 @@
     <ClInclude Include="src\base\cancelable_callback.h" />
     <ClInclude Include="src\base\command_line.h" />
     <ClInclude Include="src\base\compiler_specific.h" />
+    <ClInclude Include="src\base\containers\circular_deque.h" />
     <ClInclude Include="src\base\containers\hash_tables.h" />
     <ClInclude Include="src\base\containers\linked_list.h" />
     <ClInclude Include="src\base\containers\mru_cache.h" />
     <ClInclude Include="src\base\containers\scoped_ptr_hash_map.h" />
     <ClInclude Include="src\base\containers\small_map.h" />
+    <ClInclude Include="src\base\containers\stack.h" />
     <ClInclude Include="src\base\containers\stack_container.h" />
+    <ClInclude Include="src\base\containers\util.h" />
+    <ClInclude Include="src\base\containers\vector_buffer.h" />
     <ClInclude Include="src\base\cpu.h" />
     <ClInclude Include="src\base\debug\alias.h" />
     <ClInclude Include="src\base\debug\asan_invalid_access.h" />
@@ -197,6 +201,12 @@
     <ClInclude Include="src\base\message_loop\message_pump_win.h" />
     <ClInclude Include="src\base\message_loop\timer_slack.h" />
     <ClInclude Include="src\base\move.h" />
+    <ClInclude Include="src\base\numerics\checked_math.h" />
+    <ClInclude Include="src\base\numerics\checked_math_impl.h" />
+    <ClInclude Include="src\base\numerics\safe_conversions.h" />
+    <ClInclude Include="src\base\numerics\safe_conversions_impl.h" />
+    <ClInclude Include="src\base\numerics\safe_math_shared_impl.h" />
+    <ClInclude Include="src\base\optional.h" />
     <ClInclude Include="src\base\path_service.h" />
     <ClInclude Include="src\base\pending_task.h" />
     <ClInclude Include="src\base\pickle.h" />
@@ -221,6 +231,7 @@
     <ClInclude Include="src\base\stl_util.h" />
     <ClInclude Include="src\base\strings\string_number_conversions.h" />
     <ClInclude Include="src\base\strings\string_piece.h" />
+    <ClInclude Include="src\base\strings\string_piece_forward.h" />
     <ClInclude Include="src\base\strings\string_split.h" />
     <ClInclude Include="src\base\strings\string_tokenizer.h" />
     <ClInclude Include="src\base\strings\string_util.h" />
@@ -247,6 +258,7 @@
     <ClInclude Include="src\base\third_party\valgrind\memcheck.h" />
     <ClInclude Include="src\base\third_party\valgrind\valgrind.h" />
     <ClInclude Include="src\base\threading\scoped_blocking_call.h" />
+    <ClInclude Include="src\base\thread_annotations.h" />
     <ClInclude Include="src\base\thread_task_runner_handle.h" />
     <ClInclude Include="src\base\threading\non_thread_safe.h" />
     <ClInclude Include="src\base\threading\non_thread_safe_impl.h" />

@@ -115,7 +115,7 @@ namespace logging {
 		VlogInfo* g_vlog_info = nullptr;
 		VlogInfo* g_vlog_info_prev = nullptr;
 
-		const char* const log_severity_names[] = { "", "WARNING", "ERROR", "FATAL" };
+		const char* const log_severity_names[] = { "", "][WARNING", "][ERROR", "][FATAL" };
 		static_assert(LOG_NUM_SEVERITIES == base::size(log_severity_names),
 			"Incorrect number of log_severity_names");
 

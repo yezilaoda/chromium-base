@@ -172,7 +172,7 @@ bool FileVersionInfoWin::GetValue(const wchar_t* name,
   lang_codepage[i++] = 1252;
 
   i = 0;
-  while (i < size(lang_codepage)) {
+  while (i < base::size(lang_codepage)) {
     wchar_t sub_block[MAX_PATH];
     WORD language = lang_codepage[i++];
     WORD code_page = lang_codepage[i++];

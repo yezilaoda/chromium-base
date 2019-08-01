@@ -24,6 +24,130 @@
 #include "base/logging.h"
 #include "base/optional.h"
 
+// For a range within a container of pointers, calls delete (non-array version)
+// on these pointers.
+// NOTE: for these three functions, we could just implement a DeleteObject
+// functor and then call for_each() on the range and functor, but this
+// requires us to pull in all of algorithm.h, which seems expensive.
+// For hash_[multi]set, it is important that this deletes behind the iterator
+// because the hash_set may call the hash function on the iterator when it is
+// advanced, which could result in the hash function trying to deference a
+// stale pointer.
+template <class ForwardIterator>
+void STLDeleteContainerPointers(ForwardIterator begin, ForwardIterator end) {
+	while (begin != end) {
+		ForwardIterator temp = begin;
+		++begin;
+		delete* temp;
+	}
+}
+
+// For a range within a container of pairs, calls delete (non-array version) on
+// BOTH items in the pairs.
+// NOTE: Like STLDeleteContainerPointers, it is important that this deletes
+// behind the iterator because if both the key and value are deleted, the
+// container may call the hash function on the iterator when it is advanced,
+// which could result in the hash function trying to dereference a stale
+// pointer.
+template <class ForwardIterator>
+void STLDeleteContainerPairPointers(ForwardIterator begin,
+	ForwardIterator end) {
+	while (begin != end) {
+		ForwardIterator temp = begin;
+		++begin;
+		delete temp->first;
+		delete temp->second;
+	}
+}
+
+// For a range within a container of pairs, calls delete (non-array version) on
+// the FIRST item in the pairs.
+// NOTE: Like STLDeleteContainerPointers, deleting behind the iterator.
+template <class ForwardIterator>
+void STLDeleteContainerPairFirstPointers(ForwardIterator begin,
+	ForwardIterator end) {
+	while (begin != end) {
+		ForwardIterator temp = begin;
+		++begin;
+		delete temp->first;
+	}
+}
+
+// For a range within a container of pairs, calls delete.
+// NOTE: Like STLDeleteContainerPointers, deleting behind the iterator.
+// Deleting the value does not always invalidate the iterator, but it may
+// do so if the key is a pointer into the value object.
+template <class ForwardIterator>
+void STLDeleteContainerPairSecondPointers(ForwardIterator begin,
+	ForwardIterator end) {
+	while (begin != end) {
+		ForwardIterator temp = begin;
+		++begin;
+		delete temp->second;
+	}
+}
+// The following functions are useful for cleaning up STL containers whose
+// elements point to allocated memory.
+
+// STLDeleteElements() deletes all the elements in an STL container and clears
+// the container.  This function is suitable for use with a vector, set,
+// hash_set, or any other STL container which defines sensible begin(), end(),
+// and clear() methods.
+//
+// If container is NULL, this function is a no-op.
+//
+// As an alternative to calling STLDeleteElements() directly, consider
+// STLElementDeleter (defined below), which ensures that your container's
+// elements are deleted when the STLElementDeleter goes out of scope.
+template <class T>
+void STLDeleteElements(T* container) {
+	if (!container)
+		return;
+	STLDeleteContainerPointers(container->begin(), container->end());
+	container->clear();
+}
+
+// Given an STL container consisting of (key, value) pairs, STLDeleteValues
+// deletes all the "value" components and clears the container.  Does nothing
+// in the case it's given a NULL pointer.
+template <class T>
+void STLDeleteValues(T* container) {
+	if (!container)
+		return;
+	for (typename T::iterator i(container->begin()); i != container->end(); ++i)
+		delete i->second;
+	container->clear();
+}
+// To treat a possibly-empty vector as an array, use these functions.
+// If you know the array will never be empty, you can use &*v.begin()
+// directly, but that is undefined behaviour if |v| is empty.
+template<typename T>
+inline T* vector_as_array(std::vector<T>* v) {
+	return v->empty() ? NULL : &*v->begin();
+}
+
+template<typename T>
+inline const T* vector_as_array(const std::vector<T>* v) {
+	return v->empty() ? NULL : &*v->begin();
+}
+
+// Return a mutable char* pointing to a string's internal buffer,
+// which may not be null-terminated. Writing through this pointer will
+// modify the string.
+//
+// string_as_array(&str)[i] is valid for 0 <= i < str.size() until the
+// next call to a string method that invalidates iterators.
+//
+// As of 2006-04, there is no standard-blessed way of getting a
+// mutable reference to a string's internal buffer. However, issue 530
+// (http://www.open-std.org/JTC1/SC22/WG21/docs/lwg-active.html#530)
+// proposes this as the method. According to Matt Austern, this should
+// already work on all current implementations.
+inline char* string_as_array(std::string* str) {
+	// DO NOT USE const_cast<char*>(str->data())
+	return str->empty() ? NULL : &*str->begin();
+}
+
 namespace base {
 
 namespace internal {

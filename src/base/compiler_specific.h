@@ -198,4 +198,12 @@
 #endif  // defined(COMPILER_GCC)
 #endif  // !defined(UNLIKELY)
 
+#if defined(COMPILER_GCC) && defined(NDEBUG)
+#define ALWAYS_INLINE inline __attribute__((__always_inline__))
+#elif defined(COMPILER_MSVC) && defined(NDEBUG)
+#define ALWAYS_INLINE __forceinline
+#else
+#define ALWAYS_INLINE inline
+#endif
+
 #endif  // BASE_COMPILER_SPECIFIC_H_

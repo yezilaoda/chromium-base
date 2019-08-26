@@ -67,7 +67,7 @@ class BASE_EXPORT_PRIVATE DiscardableMemoryAshmemAllocator {
 
   // Note that the allocator must outlive the returned DiscardableAshmemChunk
   // instance.
-  scoped_ptr<DiscardableAshmemChunk> Allocate(size_t size);
+  std::unique_ptr<DiscardableAshmemChunk> Allocate(size_t size);
 
   // Returns the size of the last ashmem region which was created. This is used
   // for testing only.

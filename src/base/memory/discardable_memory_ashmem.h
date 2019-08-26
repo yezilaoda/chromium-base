@@ -45,7 +45,7 @@ class DiscardableMemoryAshmem
   DiscardableMemoryAshmemAllocator* const allocator_;
   DiscardableMemoryManager* const manager_;
   bool is_locked_;
-  scoped_ptr<DiscardableAshmemChunk> ashmem_chunk_;
+  std::unique_ptr<DiscardableAshmemChunk> ashmem_chunk_;
 
   DISALLOW_COPY_AND_ASSIGN(DiscardableMemoryAshmem);
 };

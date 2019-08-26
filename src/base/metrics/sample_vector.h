@@ -30,7 +30,7 @@ class BASE_EXPORT_PRIVATE SampleVector : public HistogramSamples {
                   HistogramBase::Count count) override;
   HistogramBase::Count GetCount(HistogramBase::Sample value) const override;
   HistogramBase::Count TotalCount() const override;
-  scoped_ptr<SampleCountIterator> Iterator() const override;
+  std::unique_ptr<SampleCountIterator> Iterator() const override;
 
   // Get count of a specific bucket.
   HistogramBase::Count GetCountAtIndex(size_t bucket_index) const;

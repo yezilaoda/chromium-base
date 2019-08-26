@@ -164,7 +164,7 @@ class SignalFDWatcher : public MessageLoopForIO::Watcher {
 // true.  If it is set, unsets it then converts it to Int32 before
 // returning it in |result|.  Returns true on success.
 bool TakeInt32FromEnvironment(const char* const var, int32* result) {
-  scoped_ptr<Environment> env(Environment::Create());
+  std::unique_ptr<Environment> env(Environment::Create());
   std::string str_val;
 
   if (!env->GetVar(var, &str_val))
@@ -186,7 +186,7 @@ bool TakeInt32FromEnvironment(const char* const var, int32* result) {
 // Unsets the environment variable |name| and returns true on success.
 // Also returns true if the variable just doesn't exist.
 bool UnsetEnvironmentVariableIfExists(const std::string& name) {
-  scoped_ptr<Environment> env(Environment::Create());
+  std::unique_ptr<Environment> env(Environment::Create());
   std::string str_val;
 
   if (!env->GetVar(name.c_str(), &str_val))
@@ -199,7 +199,7 @@ bool UnsetEnvironmentVariableIfExists(const std::string& name) {
 // for continuous integration bots. This way developers don't have to remember
 // special command-line flags.
 bool BotModeEnabled() {
-  scoped_ptr<Environment> env(Environment::Create());
+  std::unique_ptr<Environment> env(Environment::Create());
   return CommandLine::ForCurrentProcess()->HasSwitch(
       switches::kTestLauncherBotMode) ||
       env->HasVar("CHROMIUM_TEST_LAUNCHER_BOT_MODE");

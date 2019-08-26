@@ -188,8 +188,8 @@
 //
 // PASSING PARAMETERS AS A scoped_ptr
 //
-//   void TakesOwnership(scoped_ptr<Foo> arg) {}
-//   scoped_ptr<Foo> f(new Foo);
+//   void TakesOwnership(std::unique_ptr<Foo> arg) {}
+//   std::unique_ptr<Foo> f(new Foo);
 //   // f becomes null during the following call.
 //   base::Closure cb = base::Bind(&TakesOwnership, base::Passed(&f));
 //

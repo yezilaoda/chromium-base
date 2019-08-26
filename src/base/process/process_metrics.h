@@ -265,7 +265,7 @@ struct BASE_EXPORT SystemMemoryInfoKB {
   SystemMemoryInfoKB();
 
   // Serializes the platform specific fields to value.
-  scoped_ptr<Value> ToValue() const;
+  std::unique_ptr<Value> ToValue() const;
 
   int total;
   int free;
@@ -314,7 +314,7 @@ struct BASE_EXPORT SystemDiskInfo {
   SystemDiskInfo();
 
   // Serializes the platform specific fields to value.
-  scoped_ptr<Value> ToValue() const;
+  std::unique_ptr<Value> ToValue() const;
 
   uint64 reads;
   uint64 reads_merged;
@@ -351,7 +351,7 @@ struct BASE_EXPORT SwapInfo {
   }
 
   // Serializes the platform specific fields to value.
-  scoped_ptr<Value> ToValue() const;
+  std::unique_ptr<Value> ToValue() const;
 
   uint64 num_reads;
   uint64 num_writes;
@@ -373,9 +373,6 @@ class SystemMetrics {
   SystemMetrics();
 
   static SystemMetrics Sample();
-
-  // Serializes the system metrics to value.
-  scoped_ptr<Value> ToValue() const;
 
  private:
   FRIEND_TEST_ALL_PREFIXES(SystemMetricsTest, SystemMetrics);

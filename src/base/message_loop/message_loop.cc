@@ -116,11 +116,11 @@ MessageLoop::MessageLoop(Type type)
       run_loop_(NULL) {
   Init();
 
-  pump_ = CreateMessagePumpForType(type).Pass();
+  BindToCurrentThread();
 }
 
-MessageLoop::MessageLoop(scoped_ptr<MessagePump> pump)
-    : pump_(pump.Pass()),
+MessageLoop::MessageLoop(std::unique_ptr<MessagePump> pump)
+    : pump_(nullptr),
       type_(TYPE_CUSTOM),
       pending_high_res_tasks_(0),
       in_high_res_mode_(false),
@@ -130,8 +130,9 @@ MessageLoop::MessageLoop(scoped_ptr<MessagePump> pump)
 #endif  // OS_WIN
       message_histogram_(NULL),
       run_loop_(NULL) {
-  DCHECK(pump_.get());
   Init();
+
+  BindToCurrentThread();
 }
 
 MessageLoop::~MessageLoop() {
@@ -197,7 +198,7 @@ bool MessageLoop::InitMessagePumpForUIFactory(MessagePumpFactory* factory) {
 }
 
 // static
-scoped_ptr<MessagePump> MessageLoop::CreateMessagePumpForType(Type type) {
+std::unique_ptr<MessagePump> MessageLoop::CreateMessagePumpForType(Type type) {
 // TODO(rvargas): Get rid of the OS guards.
 #if defined(USE_GLIB) && !defined(OS_NACL)
   typedef MessagePumpGlib MessagePumpForUI;
@@ -206,21 +207,21 @@ scoped_ptr<MessagePump> MessageLoop::CreateMessagePumpForType(Type type) {
 #endif
 
 #if defined(OS_IOS) || defined(OS_MACOSX)
-#define MESSAGE_PUMP_UI scoped_ptr<MessagePump>(MessagePumpMac::Create())
+#define MESSAGE_PUMP_UI std::unique_ptr<MessagePump>(MessagePumpMac::Create())
 #elif defined(OS_NACL)
 // Currently NaCl doesn't have a UI MessageLoop.
 // TODO(abarth): Figure out if we need this.
-#define MESSAGE_PUMP_UI scoped_ptr<MessagePump>()
+#define MESSAGE_PUMP_UI std::unique_ptr<MessagePump>()
 #else
-#define MESSAGE_PUMP_UI scoped_ptr<MessagePump>(new MessagePumpForUI())
+#define MESSAGE_PUMP_UI std::unique_ptr<MessagePump>(new MessagePumpForUI())
 #endif
 
 #if defined(OS_MACOSX)
   // Use an OS native runloop on Mac to support timer coalescing.
   #define MESSAGE_PUMP_DEFAULT \
-      scoped_ptr<MessagePump>(new MessagePumpCFRunLoop())
+      std::unique_ptr<MessagePump>(new MessagePumpCFRunLoop())
 #else
-  #define MESSAGE_PUMP_DEFAULT scoped_ptr<MessagePump>(new MessagePumpDefault())
+  #define MESSAGE_PUMP_DEFAULT std::unique_ptr<MessagePump>(new MessagePumpDefault())
 #endif
 
   if (type == MessageLoop::TYPE_UI) {
@@ -229,11 +230,11 @@ scoped_ptr<MessagePump> MessageLoop::CreateMessagePumpForType(Type type) {
     return MESSAGE_PUMP_UI;
   }
   if (type == MessageLoop::TYPE_IO)
-    return scoped_ptr<MessagePump>(new MessagePumpForIO());
+    return std::unique_ptr<MessagePump>(new MessagePumpForIO());
 
 #if defined(OS_ANDROID)
   if (type == MessageLoop::TYPE_JAVA)
-    return scoped_ptr<MessagePump>(new MessagePumpForUI());
+    return std::unique_ptr<MessagePump>(new MessagePumpForUI());
 #endif
 
   DCHECK_EQ(MessageLoop::TYPE_DEFAULT, type);
@@ -383,7 +384,7 @@ void MessageLoop::RunHandler() {
 
 #if defined(OS_WIN)
   if (run_loop_->dispatcher_ && type() == TYPE_UI) {
-    static_cast<MessagePumpForUI*>(pump_.get())->
+    static_cast<MessagePumpForUI*>(pump_)->
         RunWithDispatcher(this, run_loop_->dispatcher_);
     return;
   }
@@ -573,6 +574,30 @@ bool MessageLoop::DoIdleWork() {
   return false;
 }
 
+
+void MessageLoop::BindToCurrentThread() {
+  //DCHECK_CALLED_ON_VALID_THREAD(bound_thread_checker_);
+  thread_id_ = PlatformThread::CurrentId();
+
+  DCHECK(!pump_);
+
+  std::unique_ptr<MessagePump> pump = CreateMessagePump();
+  pump_ = pump.get();
+
+  //DCHECK(!MessageLoopCurrent::IsSet())
+  //    << "should only have one message loop per thread";
+
+  //backend_->BindToCurrentThread(std::move(pump));
+
+}
+
+std::unique_ptr<MessagePump> MessageLoop::CreateMessagePump() {
+  // if (!pump_factory_.is_null()) {
+  // return std::move(pump_factory_).Run();
+  //} else
+  { return CreateMessagePumpForType(type_); }
+}
+
 void MessageLoop::DeleteSoonInternal(const tracked_objects::Location& from_here,
                                      void(*deleter)(const void*),
                                      const void* object) {
@@ -627,25 +652,25 @@ bool MessageLoopForUI::WatchFileDescriptor(
 #if !defined(OS_NACL_SFI)
 void MessageLoopForIO::AddIOObserver(
     MessageLoopForIO::IOObserver* io_observer) {
-  ToPumpIO(pump_.get())->AddIOObserver(io_observer);
+  ToPumpIO(pump_)->AddIOObserver(io_observer);
 }
 
 void MessageLoopForIO::RemoveIOObserver(
     MessageLoopForIO::IOObserver* io_observer) {
-  ToPumpIO(pump_.get())->RemoveIOObserver(io_observer);
+  ToPumpIO(pump_)->RemoveIOObserver(io_observer);
 }
 
 #if defined(OS_WIN)
 void MessageLoopForIO::RegisterIOHandler(HANDLE file, IOHandler* handler) {
-  ToPumpIO(pump_.get())->RegisterIOHandler(file, handler);
+  ToPumpIO(pump_)->RegisterIOHandler(file, handler);
 }
 
 bool MessageLoopForIO::RegisterJobObject(HANDLE job, IOHandler* handler) {
-  return ToPumpIO(pump_.get())->RegisterJobObject(job, handler);
+  return ToPumpIO(pump_)->RegisterJobObject(job, handler);
 }
 
 bool MessageLoopForIO::WaitForIOCompletion(DWORD timeout, IOHandler* filter) {
-  return ToPumpIO(pump_.get())->WaitForIOCompletion(timeout, filter);
+  return ToPumpIO(pump_)->WaitForIOCompletion(timeout, filter);
 }
 #elif defined(OS_POSIX)
 bool MessageLoopForIO::WatchFileDescriptor(int fd,

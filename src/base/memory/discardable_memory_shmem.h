@@ -40,7 +40,7 @@ class DiscardableMemoryShmem
 
  private:
   const size_t bytes_;
-  scoped_ptr<DiscardableMemoryShmemChunk> chunk_;
+  std::unique_ptr<DiscardableMemoryShmemChunk> chunk_;
   bool is_locked_;
 
   DISALLOW_COPY_AND_ASSIGN(DiscardableMemoryShmem);

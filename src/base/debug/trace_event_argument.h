@@ -49,7 +49,7 @@ class BASE_EXPORT TracedValue : public ConvertableToTraceFormat {
   DictionaryValue* GetCurrentDictionary();
   ListValue* GetCurrentArray();
 
-  scoped_ptr<base::Value> root_;
+  std::unique_ptr<base::Value> root_;
   std::vector<Value*> stack_;
   DISALLOW_COPY_AND_ASSIGN(TracedValue);
 };

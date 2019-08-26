@@ -83,11 +83,11 @@ class BASE_EXPORT DiscardableMemory {
   static DiscardableMemoryType GetPreferredType();
 
   // Create a DiscardableMemory instance with specified |type| and |size|.
-  static scoped_ptr<DiscardableMemory> CreateLockedMemoryWithType(
+  static std::unique_ptr<DiscardableMemory> CreateLockedMemoryWithType(
       DiscardableMemoryType type, size_t size);
 
   // Create a DiscardableMemory instance with preferred type and |size|.
-  static scoped_ptr<DiscardableMemory> CreateLockedMemory(size_t size);
+  static std::unique_ptr<DiscardableMemory> CreateLockedMemory(size_t size);
 
   // Discardable memory implementations might use this to release memory
   // or resources assigned to instances that have been purged.

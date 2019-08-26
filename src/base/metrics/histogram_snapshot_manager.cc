@@ -43,7 +43,7 @@ void HistogramSnapshotManager::PrepareDelta(const HistogramBase& histogram) {
   DCHECK(histogram_flattener_);
 
   // Get up-to-date snapshot of sample stats.
-  scoped_ptr<HistogramSamples> snapshot(histogram.SnapshotSamples());
+  std::unique_ptr<HistogramSamples> snapshot(histogram.SnapshotSamples());
   const std::string& histogram_name = histogram.histogram_name();
 
   int corruption = histogram.FindCorruption(*snapshot);

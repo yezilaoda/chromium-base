@@ -58,7 +58,7 @@ NOINLINE void CorruptMemoryBlock(bool induce_crash) {
 static const size_t kArraySize = 5;
 
 void AsanHeapOverflow() {
-  scoped_ptr<int[]> array(new int[kArraySize]);
+  std::unique_ptr<int[]> array(new int[kArraySize]);
   // Declares the dummy value as volatile to make sure it doesn't get optimized
   // away.
   int volatile dummy = 0;
@@ -67,7 +67,7 @@ void AsanHeapOverflow() {
 }
 
 void AsanHeapUnderflow() {
-  scoped_ptr<int[]> array(new int[kArraySize]);
+  std::unique_ptr<int[]> array(new int[kArraySize]);
   // Declares the dummy value as volatile to make sure it doesn't get optimized
   // away.
   int volatile dummy = 0;
@@ -80,7 +80,7 @@ void AsanHeapUnderflow() {
 }
 
 void AsanHeapUseAfterFree() {
-  scoped_ptr<int[]> array(new int[kArraySize]);
+  std::unique_ptr<int[]> array(new int[kArraySize]);
   // Declares the dummy value as volatile to make sure it doesn't get optimized
   // away.
   int volatile dummy = 0;

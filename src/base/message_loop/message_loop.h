@@ -1,4 +1,4 @@
-// Copyright 2013 The Chromium Authors. All rights reserved.
+﻿// Copyright 2013 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
@@ -115,7 +115,7 @@ class BASE_EXPORT MessageLoop : public MessagePump::Delegate {
   explicit MessageLoop(Type type = TYPE_DEFAULT);
   // Creates a TYPE_CUSTOM MessageLoop with the supplied MessagePump, which must
   // be non-NULL.
-  explicit MessageLoop(scoped_ptr<base::MessagePump> pump);
+  explicit MessageLoop(std::unique_ptr<base::MessagePump> pump);
   ~MessageLoop() override;
 
   // Returns the MessageLoop object for the current thread, or null if none.
@@ -123,7 +123,7 @@ class BASE_EXPORT MessageLoop : public MessagePump::Delegate {
 
   static void EnableHistogrammer(bool enable_histogrammer);
 
-  typedef scoped_ptr<MessagePump> (MessagePumpFactory)();
+  typedef std::unique_ptr<MessagePump> (MessagePumpFactory)();
   // Uses the given base::MessagePumpForUIFactory to override the default
   // MessagePump implementation for 'TYPE_UI'. Returns true if the factory
   // was successfully registered.
@@ -131,7 +131,7 @@ class BASE_EXPORT MessageLoop : public MessagePump::Delegate {
 
   // Creates the default MessagePump based on |type|. Caller owns return
   // value.
-  static scoped_ptr<MessagePump> CreateMessagePumpForType(Type type);
+  static std::unique_ptr<MessagePump> CreateMessagePumpForType(Type type);
   // A DestructionObserver is notified when the current MessageLoop is being
   // destroyed.  These observers are notified prior to MessageLoop::current()
   // being changed to return NULL.  This gives interested parties the chance to
@@ -403,7 +403,15 @@ class BASE_EXPORT MessageLoop : public MessagePump::Delegate {
 
   //----------------------------------------------------------------------------
  protected:
-  scoped_ptr<MessagePump> pump_;
+  // Configure various members and bind this message loop to the current thread.
+  void BindToCurrentThread();
+
+  // A raw pointer to the MessagePump handed-off to |backend_|.
+  // Valid for the lifetime of |backend_|.
+  MessagePump* pump_;
+  // The actual implentation of the MessageLoop â€” either MessageLoopImpl or
+  // SequenceManager-based.
+  //const std::unique_ptr<MessageLoopBase> backend_;
 
  private:
   friend class RunLoop;
@@ -438,8 +446,14 @@ class BASE_EXPORT MessageLoop : public MessagePump::Delegate {
   bool DoDelayedWork(TimeTicks* next_delayed_work_time) override;
   bool DoIdleWork() override;
 
+  std::unique_ptr<MessagePump> CreateMessagePump();
+
   const Type type_;
 
+  // pump_factory_.Run() is called to create a message pump for this loop
+  // if |type_| is TYPE_CUSTOM and |pump_| is null.
+  //MessagePumpFactoryCallback pump_factory_;
+  PlatformThreadId thread_id_ = kInvalidThreadId;
   // A list of tasks that need to be processed by this instance.  Note that
   // this queue is only accessed (push/pop) by our current thread.
   TaskQueue work_queue_;
@@ -489,7 +503,7 @@ class BASE_EXPORT MessageLoop : public MessagePump::Delegate {
 
   // The message loop proxy associated with this message loop.
   scoped_refptr<internal::MessageLoopProxyImpl> message_loop_proxy_;
-  scoped_ptr<ThreadTaskRunnerHandle> thread_task_runner_handle_;
+  std::unique_ptr<ThreadTaskRunnerHandle> thread_task_runner_handle_;
 
   template <class T, class R> friend class base::subtle::DeleteHelperInternal;
   template <class T, class R> friend class base::subtle::ReleaseHelperInternal;

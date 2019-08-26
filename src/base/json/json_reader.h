@@ -127,7 +127,7 @@ class BASE_EXPORT JSONReader {
   std::string GetErrorMessage() const;
 
  private:
-  scoped_ptr<internal::JSONParser> parser_;
+  std::unique_ptr<internal::JSONParser> parser_;
 };
 
 }  // namespace base

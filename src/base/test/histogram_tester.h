@@ -49,7 +49,7 @@ class HistogramTester {
 
   // Access a modified HistogramSamples containing only what has been logged
   // to the histogram since the creation of this object.
-  scoped_ptr<HistogramSamples> GetHistogramSamplesSinceCreation(
+  std::unique_ptr<HistogramSamples> GetHistogramSamplesSinceCreation(
       const std::string& histogram_name);
 
  private:

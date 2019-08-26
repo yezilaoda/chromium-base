@@ -352,7 +352,7 @@ class BASE_EXPORT SequencedWorkerPool : public TaskRunner {
 
   // Avoid pulling in too many headers by putting (almost) everything
   // into |inner_|.
-  const scoped_ptr<Inner> inner_;
+  const std::unique_ptr<Inner> inner_;
 
   DISALLOW_COPY_AND_ASSIGN(SequencedWorkerPool);
 };

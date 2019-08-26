@@ -100,9 +100,9 @@ int HistogramBase::FindCorruption(const HistogramSamples& samples) const {
 void HistogramBase::WriteJSON(std::string* output) const {
   Count count;
   int64 sum;
-  scoped_ptr<ListValue> buckets(new ListValue());
+  std::unique_ptr<ListValue> buckets(new ListValue());
   GetCountAndBucketData(&count, &sum, buckets.get());
-  scoped_ptr<DictionaryValue> parameters(new DictionaryValue());
+  std::unique_ptr<DictionaryValue> parameters(new DictionaryValue());
   GetParameters(parameters.get());
 
   JSONStringValueSerializer serializer(output);

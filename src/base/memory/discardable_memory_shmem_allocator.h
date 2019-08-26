@@ -31,7 +31,7 @@ class BASE_EXPORT DiscardableMemoryShmemAllocator {
   // Ownership of |instance| remains with the caller.
   static void SetInstance(DiscardableMemoryShmemAllocator* allocator);
 
-  virtual scoped_ptr<DiscardableMemoryShmemChunk>
+  virtual std::unique_ptr<DiscardableMemoryShmemChunk>
   AllocateLockedDiscardableMemory(size_t size) = 0;
 
  protected:

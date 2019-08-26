@@ -98,7 +98,7 @@ class TestingPrefStore : public PersistentPrefStore {
   // mutation.
   bool committed_;
 
-  scoped_ptr<ReadErrorDelegate> error_delegate_;
+  std::unique_ptr<ReadErrorDelegate> error_delegate_;
   ObserverList<PrefStore::Observer, true> observers_;
 
   DISALLOW_COPY_AND_ASSIGN(TestingPrefStore);

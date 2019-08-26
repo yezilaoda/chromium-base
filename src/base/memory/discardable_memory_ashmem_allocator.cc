@@ -115,7 +115,7 @@ namespace internal {
 class AshmemRegion {
  public:
   // Note that |allocator| must outlive |this|.
-  static scoped_ptr<AshmemRegion> Create(
+  static std::unique_ptr<AshmemRegion> Create(
       size_t size,
       const std::string& name,
       DiscardableMemoryAshmemAllocator* allocator) {
@@ -123,7 +123,7 @@ class AshmemRegion {
     int fd;
     uintptr_t base;
     if (!CreateAshmemRegion(name.c_str(), size, &fd, &base))
-      return scoped_ptr<AshmemRegion>();
+      return std::unique_ptr<AshmemRegion>();
     return make_scoped_ptr(new AshmemRegion(fd, size, base, allocator));
   }
 
@@ -145,7 +145,7 @@ class AshmemRegion {
   // 3) If there is enough room in the ashmem region then a new chunk is
   // returned. This new chunk starts at |offset_| which is the end of the
   // previously highest chunk in the region.
-  scoped_ptr<DiscardableAshmemChunk> Allocate_Locked(
+  std::unique_ptr<DiscardableAshmemChunk> Allocate_Locked(
       size_t client_requested_size,
       size_t actual_size) {
     DCHECK_LE(client_requested_size, actual_size);
@@ -159,14 +159,14 @@ class AshmemRegion {
            used_to_previous_chunk_map_.find(highest_allocated_chunk_) !=
                used_to_previous_chunk_map_.end());
 
-    scoped_ptr<DiscardableAshmemChunk> memory = ReuseFreeChunk_Locked(
+    std::unique_ptr<DiscardableAshmemChunk> memory = ReuseFreeChunk_Locked(
         client_requested_size, actual_size);
     if (memory)
       return memory.Pass();
 
     if (size_ - offset_ < actual_size) {
       // This region does not have enough space left to hold the requested size.
-      return scoped_ptr<DiscardableAshmemChunk>();
+      return std::unique_ptr<DiscardableAshmemChunk>();
     }
 
     uintptr_t const address = base_ + offset_;
@@ -234,14 +234,14 @@ class AshmemRegion {
   }
 
   // Tries to reuse a previously freed chunk by doing a closest size match.
-  scoped_ptr<DiscardableAshmemChunk> ReuseFreeChunk_Locked(
+  std::unique_ptr<DiscardableAshmemChunk> ReuseFreeChunk_Locked(
       size_t client_requested_size,
       size_t actual_size) {
     allocator_->lock_.AssertAcquired();
     const FreeChunk reused_chunk = RemoveFreeChunkFromIterator_Locked(
         free_chunks_.lower_bound(FreeChunk(actual_size)));
     if (reused_chunk.is_null())
-      return scoped_ptr<DiscardableAshmemChunk>();
+      return std::unique_ptr<DiscardableAshmemChunk>();
 
     used_to_previous_chunk_map_.insert(
         std::make_pair(reused_chunk.start, reused_chunk.previous_chunk));
@@ -275,7 +275,7 @@ class AshmemRegion {
 
     const size_t offset = reused_chunk.start - base_;
     LockAshmemRegion(fd_, offset, reused_chunk_size);
-    scoped_ptr<DiscardableAshmemChunk> memory(
+    std::unique_ptr<DiscardableAshmemChunk> memory(
         new DiscardableAshmemChunk(this, fd_,
                                    reinterpret_cast<void*>(reused_chunk.start),
                                    offset, reused_chunk_size));
@@ -469,11 +469,11 @@ DiscardableMemoryAshmemAllocator::~DiscardableMemoryAshmemAllocator() {
   DCHECK(ashmem_regions_.empty());
 }
 
-scoped_ptr<DiscardableAshmemChunk> DiscardableMemoryAshmemAllocator::Allocate(
+std::unique_ptr<DiscardableAshmemChunk> DiscardableMemoryAshmemAllocator::Allocate(
     size_t size) {
   const size_t aligned_size = AlignToNextPage(size);
   if (!aligned_size)
-    return scoped_ptr<DiscardableAshmemChunk>();
+    return std::unique_ptr<DiscardableAshmemChunk>();
   // TODO(pliard): make this function less naive by e.g. moving the free chunks
   // multiset to the allocator itself in order to decrease even more
   // fragmentation/speedup allocation. Note that there should not be more than a
@@ -482,7 +482,7 @@ scoped_ptr<DiscardableAshmemChunk> DiscardableMemoryAshmemAllocator::Allocate(
   DCHECK_LE(ashmem_regions_.size(), 5U);
   for (ScopedVector<AshmemRegion>::iterator it = ashmem_regions_.begin();
        it != ashmem_regions_.end(); ++it) {
-    scoped_ptr<DiscardableAshmemChunk> memory(
+    std::unique_ptr<DiscardableAshmemChunk> memory(
         (*it)->Allocate_Locked(size, aligned_size));
     if (memory)
       return memory.Pass();
@@ -494,7 +494,7 @@ scoped_ptr<DiscardableAshmemChunk> DiscardableMemoryAshmemAllocator::Allocate(
   for (size_t region_size = std::max(ashmem_region_size_, aligned_size);
        region_size >= min_region_size;
        region_size = AlignToNextPage(region_size / 2)) {
-    scoped_ptr<AshmemRegion> new_region(
+    std::unique_ptr<AshmemRegion> new_region(
         AshmemRegion::Create(region_size, name_.c_str(), this));
     if (!new_region)
       continue;
@@ -503,7 +503,7 @@ scoped_ptr<DiscardableAshmemChunk> DiscardableMemoryAshmemAllocator::Allocate(
     return ashmem_regions_.back()->Allocate_Locked(size, aligned_size);
   }
   // TODO(pliard): consider adding an histogram to see how often this happens.
-  return scoped_ptr<DiscardableAshmemChunk>();
+  return std::unique_ptr<DiscardableAshmemChunk>();
 }
 
 size_t DiscardableMemoryAshmemAllocator::last_ashmem_region_size() const {

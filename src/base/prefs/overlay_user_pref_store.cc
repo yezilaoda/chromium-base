@@ -109,7 +109,7 @@ PersistentPrefStore::PrefReadError OverlayUserPrefStore::ReadPrefs() {
 
 void OverlayUserPrefStore::ReadPrefsAsync(
     ReadErrorDelegate* error_delegate_raw) {
-  scoped_ptr<ReadErrorDelegate> error_delegate(error_delegate_raw);
+  std::unique_ptr<ReadErrorDelegate> error_delegate(error_delegate_raw);
   // We do not read intentionally.
   OnInitializationCompleted(true);
 }

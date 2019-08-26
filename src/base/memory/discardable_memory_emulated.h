@@ -43,7 +43,7 @@ class DiscardableMemoryEmulated
 
  private:
   const size_t bytes_;
-  scoped_ptr<uint8[]> memory_;
+  std::unique_ptr<uint8[]> memory_;
   bool is_locked_;
 
   DISALLOW_COPY_AND_ASSIGN(DiscardableMemoryEmulated);

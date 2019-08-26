@@ -70,7 +70,7 @@ class TestSuite {
 
   // Make sure that we setup an AtExitManager so Singleton objects will be
   // destroyed.
-  scoped_ptr<base::AtExitManager> at_exit_manager_;
+  std::unique_ptr<base::AtExitManager> at_exit_manager_;
 
  private:
   void InitializeFromCommandLine(int argc, char** argv);

@@ -84,7 +84,7 @@ HistogramBase* StatisticsRecorder::RegisterOrDeleteDuplicate(
 const BucketRanges* StatisticsRecorder::RegisterOrDeleteDuplicateRanges(
     const BucketRanges* ranges) {
   DCHECK(ranges->HasValidChecksum());
-  scoped_ptr<const BucketRanges> ranges_deleter;
+  std::unique_ptr<const BucketRanges> ranges_deleter;
 
   if (lock_ == NULL) {
     ANNOTATE_LEAKING_OBJECT_PTR(ranges);
@@ -298,8 +298,8 @@ StatisticsRecorder::~StatisticsRecorder() {
   DCHECK(histograms_ && ranges_ && lock_);
 
   // Clean up.
-  scoped_ptr<HistogramMap> histograms_deleter;
-  scoped_ptr<RangesMap> ranges_deleter;
+  std::unique_ptr<HistogramMap> histograms_deleter;
+  std::unique_ptr<RangesMap> ranges_deleter;
   // We don't delete lock_ on purpose to avoid having to properly protect
   // against it going away after we checked for NULL in the static methods.
   {

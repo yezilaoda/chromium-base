@@ -78,7 +78,7 @@ DiscardableMemoryType DiscardableMemory::GetPreferredType() {
 }
 
 // static
-scoped_ptr<DiscardableMemory> DiscardableMemory::CreateLockedMemory(
+std::unique_ptr<DiscardableMemory> DiscardableMemory::CreateLockedMemory(
     size_t size) {
   return CreateLockedMemoryWithType(GetPreferredType(), size);
 }

@@ -39,7 +39,7 @@ void HistogramTester::ExpectUniqueSample(
       << "Histogram \"" << name << "\" does not exist.";
 
   if (histogram) {
-    scoped_ptr<base::HistogramSamples> samples(histogram->SnapshotSamples());
+    std::unique_ptr<base::HistogramSamples> samples(histogram->SnapshotSamples());
     CheckBucketCount(name, sample, expected_count, *samples);
     CheckTotalCount(name, expected_count, *samples);
   }
@@ -55,7 +55,7 @@ void HistogramTester::ExpectBucketCount(
       << "Histogram \"" << name << "\" does not exist.";
 
   if (histogram) {
-    scoped_ptr<base::HistogramSamples> samples(histogram->SnapshotSamples());
+    std::unique_ptr<base::HistogramSamples> samples(histogram->SnapshotSamples());
     CheckBucketCount(name, sample, expected_count, *samples);
   }
 }
@@ -65,7 +65,7 @@ void HistogramTester::ExpectTotalCount(const std::string& name,
   base::HistogramBase* histogram =
       base::StatisticsRecorder::FindHistogram(name);
   if (histogram) {
-    scoped_ptr<base::HistogramSamples> samples(histogram->SnapshotSamples());
+    std::unique_ptr<base::HistogramSamples> samples(histogram->SnapshotSamples());
     CheckTotalCount(name, count, *samples);
   } else {
     // No histogram means there were zero samples.
@@ -73,12 +73,12 @@ void HistogramTester::ExpectTotalCount(const std::string& name,
   }
 }
 
-scoped_ptr<HistogramSamples> HistogramTester::GetHistogramSamplesSinceCreation(
+std::unique_ptr<HistogramSamples> HistogramTester::GetHistogramSamplesSinceCreation(
     const std::string& histogram_name) {
   HistogramBase* histogram = StatisticsRecorder::FindHistogram(histogram_name);
   if (!histogram)
-    return scoped_ptr<HistogramSamples>();
-  scoped_ptr<HistogramSamples> named_samples(histogram->SnapshotSamples());
+    return std::unique_ptr<HistogramSamples>();
+  std::unique_ptr<HistogramSamples> named_samples(histogram->SnapshotSamples());
   HistogramSamples* named_original_samples =
       histograms_snapshot_[histogram_name];
   if (named_original_samples)

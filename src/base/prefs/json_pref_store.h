@@ -50,7 +50,7 @@ class BASE_PREFS_EXPORT JsonPrefStore
   JsonPrefStore(
       const base::FilePath& pref_filename,
       const scoped_refptr<base::SequencedTaskRunner>& sequenced_task_runner,
-      scoped_ptr<PrefFilter> pref_filter);
+      std::unique_ptr<PrefFilter> pref_filter);
 
   // |sequenced_task_runner| must be a shutdown-blocking task runner, ideally
   // created by the GetTaskRunnerForFile() method above.
@@ -63,7 +63,7 @@ class BASE_PREFS_EXPORT JsonPrefStore
       const base::FilePath& pref_filename,
       const base::FilePath& pref_alternate_filename,
       const scoped_refptr<base::SequencedTaskRunner>& sequenced_task_runner,
-      scoped_ptr<PrefFilter> pref_filter);
+      std::unique_ptr<PrefFilter> pref_filter);
 
   // PrefStore overrides:
   bool GetValue(const std::string& key,
@@ -106,7 +106,7 @@ class BASE_PREFS_EXPORT JsonPrefStore
   // FinalizeFileRead() to that |pref_filter_| which is then responsible for
   // invoking it when done. If there is no |pref_filter_|, FinalizeFileRead()
   // is invoked directly.
-  void OnFileRead(scoped_ptr<ReadResult> read_result);
+  void OnFileRead(std::unique_ptr<ReadResult> read_result);
 
   // ImportantFileWriter::DataSerializer overrides:
   bool SerializeData(std::string* output) override;
@@ -119,24 +119,24 @@ class BASE_PREFS_EXPORT JsonPrefStore
   // (typically because the |pref_filter_| has already altered the |prefs|) --
   // this will be ignored if this store is read-only.
   void FinalizeFileRead(bool initialization_successful,
-                        scoped_ptr<base::DictionaryValue> prefs,
+                        std::unique_ptr<base::DictionaryValue> prefs,
                         bool schedule_write);
 
   const base::FilePath path_;
   const base::FilePath alternate_path_;
   const scoped_refptr<base::SequencedTaskRunner> sequenced_task_runner_;
 
-  scoped_ptr<base::DictionaryValue> prefs_;
+  std::unique_ptr<base::DictionaryValue> prefs_;
 
   bool read_only_;
 
   // Helper for safely writing pref data.
   base::ImportantFileWriter writer_;
 
-  scoped_ptr<PrefFilter> pref_filter_;
+  std::unique_ptr<PrefFilter> pref_filter_;
   ObserverList<PrefStore::Observer, true> observers_;
 
-  scoped_ptr<ReadErrorDelegate> error_delegate_;
+  std::unique_ptr<ReadErrorDelegate> error_delegate_;
 
   bool initialized_;
   bool filtering_in_progress_;

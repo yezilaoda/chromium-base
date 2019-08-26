@@ -29,7 +29,7 @@
 //
 //   typedef base::Callback<void(const Foo&)> OnFooCallback;
 //
-//   scoped_ptr<base::CallbackRegistry<Foo>::Subscription> RegisterCallback(
+//   std::unique_ptr<base::CallbackRegistry<Foo>::Subscription> RegisterCallback(
 //       const OnFooCallback& cb) {
 //     return callback_registry_.Add(cb);
 //   }
@@ -60,7 +60,7 @@
 //     // Do something.
 //   }
 //
-//   scoped_ptr<base::CallbackRegistry<Foo>::Subscription> foo_subscription_;
+//   std::unique_ptr<base::CallbackRegistry<Foo>::Subscription> foo_subscription_;
 // };
 
 namespace base {
@@ -94,9 +94,9 @@ class CallbackRegistryBase {
   // Add a callback to the list. The callback will remain registered until the
   // returned Subscription is destroyed, which must occur before the
   // CallbackRegistry is destroyed.
-  scoped_ptr<Subscription> Add(const CallbackType& cb) {
+  std::unique_ptr<Subscription> Add(const CallbackType& cb) {
     DCHECK(!cb.is_null());
-    return scoped_ptr<Subscription>(
+    return std::unique_ptr<Subscription>(
         new Subscription(this, callbacks_.insert(callbacks_.end(), cb)));
   }
 

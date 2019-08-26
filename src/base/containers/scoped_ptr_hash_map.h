@@ -17,7 +17,7 @@
 
 namespace base {
 
-// This type acts like a hash_map<K, scoped_ptr<V> >, based on top of
+// This type acts like a hash_map<K, std::unique_ptr<V> >, based on top of
 // base::hash_map. The ScopedPtrHashMap has ownership of all values in the data
 // structure.
 template <typename Key, typename Value>
@@ -40,7 +40,7 @@ class ScopedPtrHashMap {
   }
 
   // Replaces value but not key if key is already present.
-  iterator set(const Key& key, scoped_ptr<Value> data) {
+  iterator set(const Key& key, std::unique_ptr<Value> data) {
     iterator it = find(key);
     if (it != end()) {
       delete it->second;
@@ -52,7 +52,7 @@ class ScopedPtrHashMap {
   }
 
   // Does nothing if key is already present
-  std::pair<iterator, bool> add(const Key& key, scoped_ptr<Value> data) {
+  std::pair<iterator, bool> add(const Key& key, std::unique_ptr<Value> data) {
     std::pair<iterator, bool> result =
         data_.insert(std::make_pair(key, data.get()));
     if (result.second)
@@ -73,38 +73,38 @@ class ScopedPtrHashMap {
     return 1;
   }
 
-  scoped_ptr<Value> take(iterator it) {
+  std::unique_ptr<Value> take(iterator it) {
     DCHECK(it != data_.end());
     if (it == data_.end())
-      return scoped_ptr<Value>();
+      return std::unique_ptr<Value>();
 
-    scoped_ptr<Value> ret(it->second);
+    std::unique_ptr<Value> ret(it->second);
     it->second = NULL;
     return ret.Pass();
   }
 
-  scoped_ptr<Value> take(const Key& k) {
+  std::unique_ptr<Value> take(const Key& k) {
     iterator it = find(k);
     if (it == data_.end())
-      return scoped_ptr<Value>();
+      return std::unique_ptr<Value>();
 
     return take(it);
   }
 
-  scoped_ptr<Value> take_and_erase(iterator it) {
+  std::unique_ptr<Value> take_and_erase(iterator it) {
     DCHECK(it != data_.end());
     if (it == data_.end())
-      return scoped_ptr<Value>();
+      return std::unique_ptr<Value>();
 
-    scoped_ptr<Value> ret(it->second);
+    std::unique_ptr<Value> ret(it->second);
     data_.erase(it);
     return ret.Pass();
   }
 
-  scoped_ptr<Value> take_and_erase(const Key& k) {
+  std::unique_ptr<Value> take_and_erase(const Key& k) {
     iterator it = find(k);
     if (it == data_.end())
-      return scoped_ptr<Value>();
+      return std::unique_ptr<Value>();
 
     return take_and_erase(it);
   }

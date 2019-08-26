@@ -34,7 +34,7 @@ class BASE_EXPORT HistogramSamples {
 
   virtual void Subtract(const HistogramSamples& other);
 
-  virtual scoped_ptr<SampleCountIterator> Iterator() const = 0;
+  virtual std::unique_ptr<SampleCountIterator> Iterator() const = 0;
   virtual bool Serialize(Pickle* pickle) const;
 
   // Accessor fuctions.

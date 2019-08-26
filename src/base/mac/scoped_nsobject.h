@@ -11,9 +11,9 @@
 
 namespace base {
 
-// scoped_nsobject<> is patterned after scoped_ptr<>, but maintains ownership
+// scoped_nsobject<> is patterned after std::unique_ptr<>, but maintains ownership
 // of an NSObject subclass object.  Style deviations here are solely for
-// compatibility with scoped_ptr<>'s interface, with which everyone is already
+// compatibility with std::unique_ptr<>'s interface, with which everyone is already
 // familiar.
 //
 // scoped_nsobject<> takes ownership of an object (in the constructor or in
@@ -75,7 +75,7 @@ class scoped_nsprotocol {
     object_ = temp;
   }
 
-  // scoped_nsprotocol<>::release() is like scoped_ptr<>::release.  It is NOT a
+  // scoped_nsprotocol<>::release() is like std::unique_ptr<>::release.  It is NOT a
   // wrapper for [object_ release].  To force a scoped_nsprotocol<> to call
   // [object_ release], use scoped_nsprotocol<>::reset().
   NST release() WARN_UNUSED_RESULT {

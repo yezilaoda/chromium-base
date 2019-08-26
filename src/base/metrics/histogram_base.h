@@ -134,7 +134,7 @@ class BASE_EXPORT HistogramBase {
 
   // Snapshot the current complete set of sample data.
   // Override with atomic/locked snapshot if needed.
-  virtual scoped_ptr<HistogramSamples> SnapshotSamples() const = 0;
+  virtual std::unique_ptr<HistogramSamples> SnapshotSamples() const = 0;
 
   // The following methods provide graphical histogram displays.
   virtual void WriteHTMLGraph(std::string* output) const = 0;

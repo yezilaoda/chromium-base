@@ -237,7 +237,7 @@ void TestResultsTracker::AddGlobalTag(const std::string& tag) {
 }
 
 bool TestResultsTracker::SaveSummaryAsJSON(const FilePath& path) const {
-  scoped_ptr<DictionaryValue> summary_root(new DictionaryValue);
+  std::unique_ptr<DictionaryValue> summary_root(new DictionaryValue);
 
   ListValue* global_tags = new ListValue;
   summary_root->Set("global_tags", global_tags);

@@ -190,7 +190,7 @@ void Thread::ThreadMain() {
   {
     // The message loop for this thread.
     // Allocated on the heap to centralize any leak reports at this line.
-    scoped_ptr<MessageLoop> message_loop;
+    std::unique_ptr<MessageLoop> message_loop;
     if (!startup_data_->options.message_pump_factory.is_null()) {
       message_loop.reset(
           new MessageLoop(startup_data_->options.message_pump_factory.Run()));
@@ -208,7 +208,7 @@ void Thread::ThreadMain() {
     message_loop_ = message_loop.get();
 
 #if defined(OS_WIN)
-    scoped_ptr<win::ScopedCOMInitializer> com_initializer;
+    std::unique_ptr<win::ScopedCOMInitializer> com_initializer;
     if (com_status_ != NONE) {
       com_initializer.reset((com_status_ == STA) ?
           new win::ScopedCOMInitializer() :

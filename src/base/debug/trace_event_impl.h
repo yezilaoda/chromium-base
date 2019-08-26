@@ -200,7 +200,7 @@ class BASE_EXPORT TraceBufferChunk {
     return &chunk_[index];
   }
 
-  scoped_ptr<TraceBufferChunk> Clone() const;
+  std::unique_ptr<TraceBufferChunk> Clone() const;
 
   static const size_t kTraceBufferChunkSize = 64;
 
@@ -215,9 +215,9 @@ class BASE_EXPORT TraceBuffer {
  public:
   virtual ~TraceBuffer() {}
 
-  virtual scoped_ptr<TraceBufferChunk> GetChunk(size_t *index) = 0;
+  virtual std::unique_ptr<TraceBufferChunk> GetChunk(size_t *index) = 0;
   virtual void ReturnChunk(size_t index,
-                           scoped_ptr<TraceBufferChunk> chunk) = 0;
+                           std::unique_ptr<TraceBufferChunk> chunk) = 0;
 
   virtual bool IsFull() const = 0;
   virtual size_t Size() const = 0;
@@ -227,7 +227,7 @@ class BASE_EXPORT TraceBuffer {
   // For iteration. Each TraceBuffer can only be iterated once.
   virtual const TraceBufferChunk* NextChunk() = 0;
 
-  virtual scoped_ptr<TraceBuffer> CloneForIteration() const = 0;
+  virtual std::unique_ptr<TraceBuffer> CloneForIteration() const = 0;
 };
 
 // TraceResultBuffer collects and converts trace fragments returned by TraceLog
@@ -710,7 +710,7 @@ class BASE_EXPORT TraceLog {
   // |generation| is used in the following callbacks to check if the callback
   // is called for the flush of the current |logged_events_|.
   void FlushCurrentThread(int generation);
-  void ConvertTraceEventsToTraceFormat(scoped_ptr<TraceBuffer> logged_events,
+  void ConvertTraceEventsToTraceFormat(std::unique_ptr<TraceBuffer> logged_events,
       const TraceLog::OutputCallback& flush_output_callback);
   void FinishFlush(int generation);
   void OnFlushTimeout(int generation);
@@ -748,7 +748,7 @@ class BASE_EXPORT TraceLog {
   int locked_line_;
   Mode mode_;
   int num_traces_recorded_;
-  scoped_ptr<TraceBuffer> logged_events_;
+  std::unique_ptr<TraceBuffer> logged_events_;
   subtle::AtomicWord /* EventCallback */ event_callback_;
   bool dispatching_to_observer_list_;
   std::vector<EnabledStateObserver*> enabled_state_observer_list_;
@@ -780,7 +780,7 @@ class BASE_EXPORT TraceLog {
   subtle::AtomicWord /* Options */ trace_options_;
 
   // Sampling thread handles.
-  scoped_ptr<TraceSamplingThread> sampling_thread_;
+  std::unique_ptr<TraceSamplingThread> sampling_thread_;
   PlatformThreadHandle sampling_thread_handle_;
 
   CategoryFilter category_filter_;
@@ -797,7 +797,7 @@ class BASE_EXPORT TraceLog {
 
   // For events which can't be added into the thread local buffer, e.g. events
   // from threads without a message loop.
-  scoped_ptr<TraceBufferChunk> thread_shared_chunk_;
+  std::unique_ptr<TraceBufferChunk> thread_shared_chunk_;
   size_t thread_shared_chunk_index_;
 
   // Set when asynchronous Flush is in progress.

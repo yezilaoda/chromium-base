@@ -138,7 +138,7 @@ bool GetUserSidString(std::wstring* user_sid) {
   base::win::ScopedHandle token_scoped(token);
 
   DWORD size = sizeof(TOKEN_USER) + SECURITY_MAX_SID_SIZE;
-  scoped_ptr<BYTE[]> user_bytes(new BYTE[size]);
+  std::unique_ptr<BYTE[]> user_bytes(new BYTE[size]);
   TOKEN_USER* user = reinterpret_cast<TOKEN_USER*>(user_bytes.get());
 
   if (!::GetTokenInformation(token, TokenUser, user, size, &size))
@@ -353,7 +353,7 @@ bool DisplayVirtualKeyboard() {
       // We then replace the %CommonProgramFiles% value with the actual common
       // files path found in the process.
       string16 common_program_files_path;
-      scoped_ptr<wchar_t[]> common_program_files_wow6432;
+      std::unique_ptr<wchar_t[]> common_program_files_wow6432;
       DWORD buffer_size =
           GetEnvironmentVariable(L"CommonProgramW6432", NULL, 0);
       if (buffer_size) {

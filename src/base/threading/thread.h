@@ -36,7 +36,7 @@ class MessagePump;
 class BASE_EXPORT Thread : PlatformThread::Delegate {
  public:
   struct BASE_EXPORT Options {
-    typedef Callback<scoped_ptr<MessagePump>()> MessagePumpFactory;
+    typedef Callback<std::unique_ptr<MessagePump>()> MessagePumpFactory;
 
     Options();
     Options(MessageLoop::Type type, size_t size);

@@ -140,7 +140,7 @@ class TraceBufferRingBuffer : public TraceBuffer {
       recyclable_chunks_queue_[i] = i;
   }
 
-  scoped_ptr<TraceBufferChunk> GetChunk(size_t* index) override {
+  std::unique_ptr<TraceBufferChunk> GetChunk(size_t* index) override {
     // Because the number of threads is much less than the number of chunks,
     // the queue should never be empty.
     DCHECK(!QueueIsEmpty());
@@ -159,10 +159,10 @@ class TraceBufferRingBuffer : public TraceBuffer {
     else
       chunk = new TraceBufferChunk(current_chunk_seq_++);
 
-    return scoped_ptr<TraceBufferChunk>(chunk);
+    return std::unique_ptr<TraceBufferChunk>(chunk);
   }
 
-  void ReturnChunk(size_t index, scoped_ptr<TraceBufferChunk> chunk) override {
+  void ReturnChunk(size_t index, std::unique_ptr<TraceBufferChunk> chunk) override {
     // When this method is called, the queue should not be full because it
     // can contain all chunks including the one to be returned.
     DCHECK(!QueueIsFull());
@@ -209,8 +209,8 @@ class TraceBufferRingBuffer : public TraceBuffer {
     return NULL;
   }
 
-  scoped_ptr<TraceBuffer> CloneForIteration() const override {
-    scoped_ptr<ClonedTraceBuffer> cloned_buffer(new ClonedTraceBuffer());
+  std::unique_ptr<TraceBuffer> CloneForIteration() const override {
+    std::unique_ptr<ClonedTraceBuffer> cloned_buffer(new ClonedTraceBuffer());
     for (size_t queue_index = queue_head_; queue_index != queue_tail_;
         queue_index = NextQueueIndex(queue_index)) {
       size_t chunk_index = recyclable_chunks_queue_[queue_index];
@@ -233,11 +233,11 @@ class TraceBufferRingBuffer : public TraceBuffer {
           chunks_[current_iteration_index_++] : NULL;
     }
 
-    scoped_ptr<TraceBufferChunk> GetChunk(size_t* index) override {
+    std::unique_ptr<TraceBufferChunk> GetChunk(size_t* index) override {
       NOTIMPLEMENTED();
-      return scoped_ptr<TraceBufferChunk>();
+      return std::unique_ptr<TraceBufferChunk>();
     }
-    void ReturnChunk(size_t index, scoped_ptr<TraceBufferChunk>) override {
+    void ReturnChunk(size_t index, std::unique_ptr<TraceBufferChunk>) override {
       NOTIMPLEMENTED();
     }
     bool IsFull() const override { return false; }
@@ -246,9 +246,9 @@ class TraceBufferRingBuffer : public TraceBuffer {
     TraceEvent* GetEventByHandle(TraceEventHandle handle) override {
       return NULL;
     }
-    scoped_ptr<TraceBuffer> CloneForIteration() const override {
+    std::unique_ptr<TraceBuffer> CloneForIteration() const override {
       NOTIMPLEMENTED();
-      return scoped_ptr<TraceBuffer>();
+      return std::unique_ptr<TraceBuffer>();
     }
 
     size_t current_iteration_index_;
@@ -283,7 +283,7 @@ class TraceBufferRingBuffer : public TraceBuffer {
   size_t max_chunks_;
   ScopedVector<TraceBufferChunk> chunks_;
 
-  scoped_ptr<size_t[]> recyclable_chunks_queue_;
+  std::unique_ptr<size_t[]> recyclable_chunks_queue_;
   size_t queue_head_;
   size_t queue_tail_;
 
@@ -302,7 +302,7 @@ class TraceBufferVector : public TraceBuffer {
     chunks_.reserve(max_chunks_);
   }
 
-  scoped_ptr<TraceBufferChunk> GetChunk(size_t* index) override {
+  std::unique_ptr<TraceBufferChunk> GetChunk(size_t* index) override {
     // This function may be called when adding normal events or indirectly from
     // AddMetadataEventsWhileLocked(). We can not DECHECK(!IsFull()) because we
     // have to add the metadata events and flush thread-local buffers even if
@@ -311,11 +311,11 @@ class TraceBufferVector : public TraceBuffer {
     chunks_.push_back(NULL);  // Put NULL in the slot of a in-flight chunk.
     ++in_flight_chunk_count_;
     // + 1 because zero chunk_seq is not allowed.
-    return scoped_ptr<TraceBufferChunk>(
+    return std::unique_ptr<TraceBufferChunk>(
         new TraceBufferChunk(static_cast<uint32>(*index) + 1));
   }
 
-  void ReturnChunk(size_t index, scoped_ptr<TraceBufferChunk> chunk) override {
+  void ReturnChunk(size_t index, std::unique_ptr<TraceBufferChunk> chunk) override {
     DCHECK_GT(in_flight_chunk_count_, 0u);
     DCHECK_LT(index, chunks_.size());
     DCHECK(!chunks_[index]);
@@ -353,9 +353,9 @@ class TraceBufferVector : public TraceBuffer {
     return NULL;
   }
 
-  scoped_ptr<TraceBuffer> CloneForIteration() const override {
+  std::unique_ptr<TraceBuffer> CloneForIteration() const override {
     NOTIMPLEMENTED();
-    return scoped_ptr<TraceBuffer>();
+    return std::unique_ptr<TraceBuffer>();
   }
 
  private:
@@ -418,8 +418,8 @@ TraceEvent* TraceBufferChunk::AddTraceEvent(size_t* event_index) {
   return &chunk_[*event_index];
 }
 
-scoped_ptr<TraceBufferChunk> TraceBufferChunk::Clone() const {
-  scoped_ptr<TraceBufferChunk> cloned_chunk(new TraceBufferChunk(seq_));
+std::unique_ptr<TraceBufferChunk> TraceBufferChunk::Clone() const {
+  std::unique_ptr<TraceBufferChunk> cloned_chunk(new TraceBufferChunk(seq_));
   cloned_chunk->next_free_ = next_free_;
   for (size_t i = 0; i < next_free_; ++i)
     cloned_chunk->chunk_[i].CopyFrom(chunk_[i]);
@@ -1070,7 +1070,7 @@ class TraceLog::ThreadLocalEventBuffer
   // Since TraceLog is a leaky singleton, trace_log_ will always be valid
   // as long as the thread exists.
   TraceLog* trace_log_;
-  scoped_ptr<TraceBufferChunk> chunk_;
+  std::unique_ptr<TraceBufferChunk> chunk_;
   size_t chunk_index_;
   int event_count_;
   TimeDelta overhead_;
@@ -1739,7 +1739,7 @@ void TraceLog::Flush(const TraceLog::OutputCallback& cb) {
 }
 
 void TraceLog::ConvertTraceEventsToTraceFormat(
-    scoped_ptr<TraceBuffer> logged_events,
+    std::unique_ptr<TraceBuffer> logged_events,
     const TraceLog::OutputCallback& flush_output_callback) {
 
   if (flush_output_callback.is_null())
@@ -1770,7 +1770,7 @@ void TraceLog::ConvertTraceEventsToTraceFormat(
 }
 
 void TraceLog::FinishFlush(int generation) {
-  scoped_ptr<TraceBuffer> previous_logged_events;
+  std::unique_ptr<TraceBuffer> previous_logged_events;
   OutputCallback flush_output_callback;
 
   if (!CheckGeneration(generation))
@@ -1839,7 +1839,7 @@ void TraceLog::OnFlushTimeout(int generation) {
 
 void TraceLog::FlushButLeaveBufferIntact(
     const TraceLog::OutputCallback& flush_output_callback) {
-  scoped_ptr<TraceBuffer> previous_logged_events;
+  std::unique_ptr<TraceBuffer> previous_logged_events;
   {
     AutoLock lock(lock_);
     AddMetadataEventsWhileLocked();

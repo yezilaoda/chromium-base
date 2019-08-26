@@ -157,7 +157,7 @@ class StatsTable::Internal {
   // Initializes our in-memory pointers into a pre-created StatsTable.
   void ComputeMappedPointers(void* memory);
 
-  scoped_ptr<SharedMemory> shared_memory_;
+  std::unique_ptr<SharedMemory> shared_memory_;
   TableHeader* table_header_;
   char* thread_names_table_;
   PlatformThreadId* thread_tid_table_;
@@ -174,14 +174,14 @@ StatsTable::Internal* StatsTable::Internal::New(
     int size,
     int max_threads,
     int max_counters) {
-  scoped_ptr<SharedMemory> shared_memory(CreateSharedMemory(table, size));
+  std::unique_ptr<SharedMemory> shared_memory(CreateSharedMemory(table, size));
   if (!shared_memory.get())
     return NULL;
   if (!shared_memory->Map(size))
     return NULL;
   void* memory = shared_memory->memory();
 
-  scoped_ptr<Internal> internal(new Internal(shared_memory.release()));
+  std::unique_ptr<Internal> internal(new Internal(shared_memory.release()));
   TableHeader* header = static_cast<TableHeader*>(memory);
 
   // If the version does not match, then assume the table needs
@@ -205,12 +205,12 @@ SharedMemory* StatsTable::Internal::CreateSharedMemory(
     return new SharedMemory(table, false);
 
   // Otherwise we need to create it.
-  scoped_ptr<SharedMemory> shared_memory(new SharedMemory());
+  std::unique_ptr<SharedMemory> shared_memory(new SharedMemory());
   if (!shared_memory->CreateAnonymous(size))
     return NULL;
   return shared_memory.release();
 #elif defined(OS_WIN)
-  scoped_ptr<SharedMemory> shared_memory(new SharedMemory());
+  std::unique_ptr<SharedMemory> shared_memory(new SharedMemory());
   if (table.empty()) {
     // Create an anonymous table.
     if (!shared_memory->CreateAnonymous(size))

@@ -52,8 +52,8 @@ void SparseHistogram::Add(Sample value) {
   samples_.Accumulate(value, 1);
 }
 
-scoped_ptr<HistogramSamples> SparseHistogram::SnapshotSamples() const {
-  scoped_ptr<SampleMap> snapshot(new SampleMap());
+std::unique_ptr<HistogramSamples> SparseHistogram::SnapshotSamples() const {
+  std::unique_ptr<SampleMap> snapshot(new SampleMap());
 
   base::AutoLock auto_lock(lock_);
   snapshot->Add(samples_);
@@ -115,7 +115,7 @@ void SparseHistogram::WriteAsciiImpl(bool graph_it,
                                      const std::string& newline,
                                      std::string* output) const {
   // Get a local copy of the data so we are consistent.
-  scoped_ptr<HistogramSamples> snapshot = SnapshotSamples();
+  std::unique_ptr<HistogramSamples> snapshot = SnapshotSamples();
   Count total_count = snapshot->TotalCount();
   double scaled_total_count = total_count / 100.0;
 
@@ -128,7 +128,7 @@ void SparseHistogram::WriteAsciiImpl(bool graph_it,
   // normalize the graphical bar-width relative to that sample count.
   Count largest_count = 0;
   Sample largest_sample = 0;
-  scoped_ptr<SampleCountIterator> it = snapshot->Iterator();
+  std::unique_ptr<SampleCountIterator> it = snapshot->Iterator();
   while (!it->Done())
   {
     Sample min;

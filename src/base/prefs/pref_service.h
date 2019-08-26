@@ -236,11 +236,11 @@ class BASE_PREFS_EXPORT PrefService : public base::NonThreadSafe {
   bool HasPrefPath(const std::string& path) const;
 
   // Returns a dictionary with effective preference values.
-  scoped_ptr<base::DictionaryValue> GetPreferenceValues() const;
+  std::unique_ptr<base::DictionaryValue> GetPreferenceValues() const;
 
   // Returns a dictionary with effective preference values, omitting prefs that
   // are at their default values.
-  scoped_ptr<base::DictionaryValue> GetPreferenceValuesOmitDefaults() const;
+  std::unique_ptr<base::DictionaryValue> GetPreferenceValuesOmitDefaults() const;
 
   // Returns a dictionary with effective preference values. Contrary to
   // GetPreferenceValues(), the paths of registered preferences are not split on
@@ -249,7 +249,7 @@ class BASE_PREFS_EXPORT PrefService : public base::NonThreadSafe {
   // For example, if "foo.bar" is a registered preference, the result could look
   // like this:
   //   {"foo.bar": {"a": {"b": true}}}.
-  scoped_ptr<base::DictionaryValue> GetPreferenceValuesWithoutPathExpansion()
+  std::unique_ptr<base::DictionaryValue> GetPreferenceValuesWithoutPathExpansion()
       const;
 
   bool ReadOnly() const;
@@ -284,11 +284,11 @@ class BASE_PREFS_EXPORT PrefService : public base::NonThreadSafe {
   // The PrefNotifier handles registering and notifying preference observers.
   // It is created and owned by this PrefService. Subclasses may access it for
   // unit testing.
-  scoped_ptr<PrefNotifierImpl> pref_notifier_;
+  std::unique_ptr<PrefNotifierImpl> pref_notifier_;
 
   // The PrefValueStore provides prioritized preference values. It is owned by
   // this PrefService. Subclasses may access it for unit testing.
-  scoped_ptr<PrefValueStore> pref_value_store_;
+  std::unique_ptr<PrefValueStore> pref_value_store_;
 
   scoped_refptr<PrefRegistry> pref_registry_;
 

@@ -29,7 +29,7 @@
 //
 //   typedef base::Callback<void(const Foo&)> OnFooCallback;
 //
-//   scoped_ptr<base::CallbackList<void(const Foo&)>::Subscription>
+//   std::unique_ptr<base::CallbackList<void(const Foo&)>::Subscription>
 //   RegisterCallback(const OnFooCallback& cb) {
 //     return callback_list_.Add(cb);
 //   }
@@ -62,7 +62,7 @@
 //     // Do something.
 //   }
 //
-//   scoped_ptr<base::CallbackList<void(const Foo&)>::Subscription>
+//   std::unique_ptr<base::CallbackList<void(const Foo&)>::Subscription>
 //       foo_subscription_;
 //
 //   DISALLOW_COPY_AND_ASSIGN(MyWidgetListener);
@@ -103,9 +103,9 @@ class CallbackListBase {
   // Add a callback to the list. The callback will remain registered until the
   // returned Subscription is destroyed, which must occur before the
   // CallbackList is destroyed.
-  scoped_ptr<Subscription> Add(const CallbackType& cb) WARN_UNUSED_RESULT {
+  std::unique_ptr<Subscription> Add(const CallbackType& cb) WARN_UNUSED_RESULT {
     DCHECK(!cb.is_null());
-    return scoped_ptr<Subscription>(
+    return std::unique_ptr<Subscription>(
         new Subscription(this, callbacks_.insert(callbacks_.end(), cb)));
   }
 

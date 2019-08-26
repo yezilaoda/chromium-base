@@ -46,7 +46,7 @@ bool EnableLowFragmentationHeap() {
   // Gives us some extra space in the array in case a thread is creating heaps
   // at the same time we're querying them.
   static const int MARGIN = 8;
-  scoped_ptr<HANDLE[]> heaps(new HANDLE[number_heaps + MARGIN]);
+  std::unique_ptr<HANDLE[]> heaps(new HANDLE[number_heaps + MARGIN]);
   number_heaps = GetProcessHeaps(number_heaps + MARGIN, heaps.get());
   if (!number_heaps)
     return false;

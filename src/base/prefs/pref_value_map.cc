@@ -40,7 +40,7 @@ bool PrefValueMap::GetValue(const std::string& key, base::Value** value) {
 
 bool PrefValueMap::SetValue(const std::string& key, base::Value* value) {
   DCHECK(value);
-  scoped_ptr<base::Value> value_ptr(value);
+  std::unique_ptr<base::Value> value_ptr(value);
   const Map::iterator entry = prefs_.find(key);
   if (entry != prefs_.end()) {
     if (base::Value::Equals(entry->second, value))

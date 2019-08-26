@@ -27,7 +27,7 @@ struct JsonPrefStore::ReadResult {
   ReadResult();
   ~ReadResult();
 
-  scoped_ptr<base::Value> value;
+  std::unique_ptr<base::Value> value;
   PrefReadError error;
   bool no_dir;
 
@@ -91,7 +91,7 @@ PersistentPrefStore::PrefReadError HandleReadErrors(
   return PersistentPrefStore::PREF_READ_ERROR_NONE;
 }
 
-scoped_ptr<JsonPrefStore::ReadResult> ReadPrefsFromDisk(
+std::unique_ptr<JsonPrefStore::ReadResult> ReadPrefsFromDisk(
     const base::FilePath& path,
     const base::FilePath& alternate_path) {
   if (!base::PathExists(path) && !alternate_path.empty() &&
@@ -101,7 +101,7 @@ scoped_ptr<JsonPrefStore::ReadResult> ReadPrefsFromDisk(
 
   int error_code;
   std::string error_msg;
-  scoped_ptr<JsonPrefStore::ReadResult> read_result(
+  std::unique_ptr<JsonPrefStore::ReadResult> read_result(
       new JsonPrefStore::ReadResult);
   JSONFileValueSerializer serializer(path);
   read_result->value.reset(serializer.Deserialize(&error_code, &error_msg));
@@ -127,7 +127,7 @@ scoped_refptr<base::SequencedTaskRunner> JsonPrefStore::GetTaskRunnerForFile(
 JsonPrefStore::JsonPrefStore(
     const base::FilePath& filename,
     const scoped_refptr<base::SequencedTaskRunner>& sequenced_task_runner,
-    scoped_ptr<PrefFilter> pref_filter)
+    std::unique_ptr<PrefFilter> pref_filter)
     : path_(filename),
       sequenced_task_runner_(sequenced_task_runner),
       prefs_(new base::DictionaryValue()),
@@ -143,7 +143,7 @@ JsonPrefStore::JsonPrefStore(
     const base::FilePath& filename,
     const base::FilePath& alternate_filename,
     const scoped_refptr<base::SequencedTaskRunner>& sequenced_task_runner,
-    scoped_ptr<PrefFilter> pref_filter)
+    std::unique_ptr<PrefFilter> pref_filter)
     : path_(filename),
       alternate_path_(alternate_filename),
       sequenced_task_runner_(sequenced_task_runner),
@@ -204,7 +204,7 @@ void JsonPrefStore::SetValue(const std::string& key, base::Value* value) {
   DCHECK(CalledOnValidThread());
 
   DCHECK(value);
-  scoped_ptr<base::Value> new_value(value);
+  std::unique_ptr<base::Value> new_value(value);
   base::Value* old_value = NULL;
   prefs_->Get(key, &old_value);
   if (!old_value || !value->Equals(old_value)) {
@@ -218,7 +218,7 @@ void JsonPrefStore::SetValueSilently(const std::string& key,
   DCHECK(CalledOnValidThread());
 
   DCHECK(value);
-  scoped_ptr<base::Value> new_value(value);
+  std::unique_ptr<base::Value> new_value(value);
   base::Value* old_value = NULL;
   prefs_->Get(key, &old_value);
   if (!old_value || !value->Equals(old_value)) {
@@ -259,7 +259,7 @@ PersistentPrefStore::PrefReadError JsonPrefStore::ReadPrefs() {
   DCHECK(CalledOnValidThread());
 
   if (path_.empty()) {
-    scoped_ptr<ReadResult> no_file_result;
+    std::unique_ptr<ReadResult> no_file_result;
     no_file_result->error = PREF_READ_ERROR_FILE_NOT_SPECIFIED;
     OnFileRead(no_file_result.Pass());
     return PREF_READ_ERROR_FILE_NOT_SPECIFIED;
@@ -276,7 +276,7 @@ void JsonPrefStore::ReadPrefsAsync(ReadErrorDelegate* error_delegate) {
   initialized_ = false;
   error_delegate_.reset(error_delegate);
   if (path_.empty()) {
-    scoped_ptr<ReadResult> no_file_result;
+    std::unique_ptr<ReadResult> no_file_result;
     no_file_result->error = PREF_READ_ERROR_FILE_NOT_SPECIFIED;
     OnFileRead(no_file_result.Pass());
     return;
@@ -316,12 +316,12 @@ void JsonPrefStore::RegisterOnNextSuccessfulWriteCallback(
   writer_.RegisterOnNextSuccessfulWriteCallback(on_next_successful_write);
 }
 
-void JsonPrefStore::OnFileRead(scoped_ptr<ReadResult> read_result) {
+void JsonPrefStore::OnFileRead(std::unique_ptr<ReadResult> read_result) {
   DCHECK(CalledOnValidThread());
 
   DCHECK(read_result);
 
-  scoped_ptr<base::DictionaryValue> unfiltered_prefs(new base::DictionaryValue);
+  std::unique_ptr<base::DictionaryValue> unfiltered_prefs(new base::DictionaryValue);
 
   read_error_ = read_result->error;
 
@@ -414,7 +414,7 @@ bool JsonPrefStore::SerializeData(std::string* output) {
 }
 
 void JsonPrefStore::FinalizeFileRead(bool initialization_successful,
-                                     scoped_ptr<base::DictionaryValue> prefs,
+                                     std::unique_ptr<base::DictionaryValue> prefs,
                                      bool schedule_write) {
   DCHECK(CalledOnValidThread());
 

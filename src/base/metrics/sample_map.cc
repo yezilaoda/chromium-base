@@ -40,8 +40,8 @@ Count SampleMap::TotalCount() const {
   return count;
 }
 
-scoped_ptr<SampleCountIterator> SampleMap::Iterator() const {
-  return scoped_ptr<SampleCountIterator>(new SampleMapIterator(sample_counts_));
+std::unique_ptr<SampleCountIterator> SampleMap::Iterator() const {
+  return std::unique_ptr<SampleCountIterator>(new SampleMapIterator(sample_counts_));
 }
 
 bool SampleMap::AddSubtractImpl(SampleCountIterator* iter,

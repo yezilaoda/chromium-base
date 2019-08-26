@@ -15,7 +15,7 @@
 namespace base {
 namespace mac {
 
-// Just like scoped_ptr<> but for launch_data_t.
+// Just like std::unique_ptr<> but for launch_data_t.
 class ScopedLaunchData {
  public:
   typedef launch_data_t element_type;

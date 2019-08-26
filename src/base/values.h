@@ -165,39 +165,6 @@ class BASE_EXPORT StringValue : public Value {
   std::string value_;
 };
 
-class BASE_EXPORT BinaryValue: public Value {
- public:
-  // Creates a BinaryValue with a null buffer and size of 0.
-  BinaryValue();
-
-  // Creates a BinaryValue, taking ownership of the bytes pointed to by
-  // |buffer|.
-  BinaryValue(scoped_ptr<char[]> buffer, size_t size);
-
-  ~BinaryValue() override;
-
-  // For situations where you want to keep ownership of your buffer, this
-  // factory method creates a new BinaryValue by copying the contents of the
-  // buffer that's passed in.
-  static BinaryValue* CreateWithCopiedBuffer(const char* buffer, size_t size);
-
-  size_t GetSize() const { return size_; }
-
-  // May return NULL.
-  char* GetBuffer() { return buffer_.get(); }
-  const char* GetBuffer() const { return buffer_.get(); }
-
-  // Overridden from Value:
-  BinaryValue* DeepCopy() const override;
-  bool Equals(const Value* other) const override;
-
- private:
-  scoped_ptr<char[]> buffer_;
-  size_t size_;
-
-  DISALLOW_COPY_AND_ASSIGN(BinaryValue);
-};
-
 // DictionaryValue provides a key-value dictionary with (optional) "path"
 // parsing for recursive access; see the comment at the top of the file. Keys
 // are |std::string|s and should be UTF-8 encoded.
@@ -277,8 +244,8 @@ class BASE_EXPORT DictionaryValue : public Value {
   bool GetString(const std::string& path, std::string* out_value) const;
   bool GetString(const std::string& path, string16* out_value) const;
   bool GetStringASCII(const std::string& path, std::string* out_value) const;
-  bool GetBinary(const std::string& path, const BinaryValue** out_value) const;
-  bool GetBinary(const std::string& path, BinaryValue** out_value);
+  bool GetBinary(const std::string& path, const Value** out_value) const;
+  bool GetBinary(const std::string& path, Value** out_value);
   bool GetDictionary(const std::string& path,
                      const DictionaryValue** out_value) const;
   bool GetDictionary(const std::string& path, DictionaryValue** out_value);
@@ -316,17 +283,17 @@ class BASE_EXPORT DictionaryValue : public Value {
   // |out_value|.  If |out_value| is NULL, the removed value will be deleted.
   // This method returns true if |path| is a valid path; otherwise it will
   // return false and the DictionaryValue object will be unchanged.
-  virtual bool Remove(const std::string& path, scoped_ptr<Value>* out_value);
+  virtual bool Remove(const std::string& path, std::unique_ptr<Value>* out_value);
 
   // Like Remove(), but without special treatment of '.'.  This allows e.g. URLs
   // to be used as paths.
   virtual bool RemoveWithoutPathExpansion(const std::string& key,
-                                          scoped_ptr<Value>* out_value);
+                                          std::unique_ptr<Value>* out_value);
 
   // Removes a path, clearing out all dictionaries on |path| that remain empty
   // after removing the value at |path|.
   virtual bool RemovePath(const std::string& path,
-                          scoped_ptr<Value>* out_value);
+                          std::unique_ptr<Value>* out_value);
 
   // Makes a copy of |this| but doesn't include empty dictionaries and lists in
   // the copy.  This never returns NULL, even if |this| itself is empty.
@@ -413,8 +380,8 @@ class BASE_EXPORT ListValue : public Value {
   bool GetDouble(size_t index, double* out_value) const;
   bool GetString(size_t index, std::string* out_value) const;
   bool GetString(size_t index, string16* out_value) const;
-  bool GetBinary(size_t index, const BinaryValue** out_value) const;
-  bool GetBinary(size_t index, BinaryValue** out_value);
+  bool GetBinary(size_t index, const Value** out_value) const;
+  bool GetBinary(size_t index, Value** out_value);
   bool GetDictionary(size_t index, const DictionaryValue** out_value) const;
   bool GetDictionary(size_t index, DictionaryValue** out_value);
   bool GetList(size_t index, const ListValue** out_value) const;
@@ -425,7 +392,7 @@ class BASE_EXPORT ListValue : public Value {
   // passed out via |out_value|.  If |out_value| is NULL, the removed value will
   // be deleted.  This method returns true if |index| is valid; otherwise
   // it will return false and the ListValue object will be unchanged.
-  virtual bool Remove(size_t index, scoped_ptr<Value>* out_value);
+  virtual bool Remove(size_t index, std::unique_ptr<Value>* out_value);
 
   // Removes the first instance of |value| found in the list, if any, and
   // deletes it. |index| is the location where |value| was found. Returns false
@@ -436,7 +403,7 @@ class BASE_EXPORT ListValue : public Value {
   // deleted, otherwise ownership of the value is passed back to the caller.
   // Returns an iterator pointing to the location of the element that
   // followed the erased element.
-  iterator Erase(iterator iter, scoped_ptr<Value>* out_value);
+  iterator Erase(iterator iter, std::unique_ptr<Value>* out_value);
 
   // Appends a Value to the end of the list.
   void Append(Value* in_value);

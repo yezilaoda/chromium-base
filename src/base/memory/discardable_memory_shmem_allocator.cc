@@ -14,7 +14,7 @@ namespace {
 class DiscardableMemoryShmemChunkImpl : public DiscardableMemoryShmemChunk {
  public:
   explicit DiscardableMemoryShmemChunkImpl(
-      scoped_ptr<DiscardableSharedMemory> shared_memory)
+      std::unique_ptr<DiscardableSharedMemory> shared_memory)
       : shared_memory_(shared_memory.Pass()) {}
 
   // Overridden from DiscardableMemoryShmemChunk:
@@ -26,7 +26,7 @@ class DiscardableMemoryShmemChunkImpl : public DiscardableMemoryShmemChunk {
   }
 
  private:
-  scoped_ptr<DiscardableSharedMemory> shared_memory_;
+  std::unique_ptr<DiscardableSharedMemory> shared_memory_;
 
   DISALLOW_COPY_AND_ASSIGN(DiscardableMemoryShmemChunkImpl);
 };
@@ -37,9 +37,9 @@ class DiscardableMemoryShmemAllocatorImpl
     : public DiscardableMemoryShmemAllocator {
  public:
   // Overridden from DiscardableMemoryShmemAllocator:
-  scoped_ptr<DiscardableMemoryShmemChunk>
+  std::unique_ptr<DiscardableMemoryShmemChunk>
   AllocateLockedDiscardableMemory(size_t size) override {
-    scoped_ptr<DiscardableSharedMemory> memory(new DiscardableSharedMemory);
+    std::unique_ptr<DiscardableSharedMemory> memory(new DiscardableSharedMemory);
     if (!memory->CreateAndMap(size))
       return nullptr;
 

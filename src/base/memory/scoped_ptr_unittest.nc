@@ -21,76 +21,76 @@ class RefCountedClass : public base::RefCountedThreadSafe<RefCountedClass> {
 
 #if defined(NCTEST_NO_PASS_DOWNCAST)  // [r"fatal error: no matching constructor for initialization of 'base::internal::scoped_ptr_impl<\(anonymous namespace\)::Child, base::DefaultDeleter<\(anonymous namespace\)::Child> >::Data'"]
 
-scoped_ptr<Child> DowncastUsingPassAs(scoped_ptr<Parent> object) {
+std::unique_ptr<Child> DowncastUsingPassAs(std::unique_ptr<Parent> object) {
   return object.Pass();
 }
 
 #elif defined(NCTEST_NO_REF_COUNTED_SCOPED_PTR)  // [r"fatal error: static_assert failed \"T_is_refcounted_type_and_needs_scoped_refptr\""]
 
-// scoped_ptr<> should not work for ref-counted objects.
+// std::unique_ptr<> should not work for ref-counted objects.
 void WontCompile() {
-  scoped_ptr<RefCountedClass> x;
+  std::unique_ptr<RefCountedClass> x;
 }
 
 #elif defined(NCTEST_NO_ARRAY_WITH_SIZE)  // [r"fatal error: static_assert failed \"do_not_use_array_with_size_as_type\""]
 
 void WontCompile() {
-  scoped_ptr<int[10]> x;
+  std::unique_ptr<int[10]> x;
 }
 
 #elif defined(NCTEST_NO_PASS_FROM_ARRAY)  // [r"fatal error: static_assert failed \"U_cannot_be_an_array\""]
 
 void WontCompile() {
-  scoped_ptr<int[]> a;
-  scoped_ptr<int*> b;
+  std::unique_ptr<int[]> a;
+  std::unique_ptr<int*> b;
   b = a.Pass();
 }
 
 #elif defined(NCTEST_NO_PASS_TO_ARRAY)  // [r"fatal error: no viable overloaded '='"]
 
 void WontCompile() {
-  scoped_ptr<int*> a;
-  scoped_ptr<int[]> b;
+  std::unique_ptr<int*> a;
+  std::unique_ptr<int[]> b;
   b = a.Pass();
 }
 
-#elif defined(NCTEST_NO_CONSTRUCT_FROM_ARRAY)  // [r"fatal error: 'impl_' is a private member of 'scoped_ptr<int \[\], base::DefaultDeleter<int \[\]> >'"]
+#elif defined(NCTEST_NO_CONSTRUCT_FROM_ARRAY)  // [r"fatal error: 'impl_' is a private member of 'std::unique_ptr<int \[\], base::DefaultDeleter<int \[\]> >'"]
 
 void WontCompile() {
-  scoped_ptr<int[]> a;
-  scoped_ptr<int*> b(a.Pass());
+  std::unique_ptr<int[]> a;
+  std::unique_ptr<int*> b(a.Pass());
 }
 
-#elif defined(NCTEST_NO_CONSTRUCT_TO_ARRAY)  // [r"fatal error: no matching constructor for initialization of 'scoped_ptr<int \[\]>'"]
+#elif defined(NCTEST_NO_CONSTRUCT_TO_ARRAY)  // [r"fatal error: no matching constructor for initialization of 'std::unique_ptr<int \[\]>'"]
 
 void WontCompile() {
-  scoped_ptr<int*> a;
-  scoped_ptr<int[]> b(a.Pass());
+  std::unique_ptr<int*> a;
+  std::unique_ptr<int[]> b(a.Pass());
 }
 
 #elif defined(NCTEST_NO_CONSTRUCT_SCOPED_PTR_ARRAY_FROM_NULL)  // [r"is ambiguous"]
 
 void WontCompile() {
-  scoped_ptr<int[]> x(NULL);
+  std::unique_ptr<int[]> x(NULL);
 }
 
-#elif defined(NCTEST_NO_CONSTRUCT_SCOPED_PTR_ARRAY_FROM_DERIVED)  // [r"fatal error: calling a private constructor of class 'scoped_ptr<\(anonymous namespace\)::Parent \[\], base::DefaultDeleter<\(anonymous namespace\)::Parent \[\]> >'"]
+#elif defined(NCTEST_NO_CONSTRUCT_SCOPED_PTR_ARRAY_FROM_DERIVED)  // [r"fatal error: calling a private constructor of class 'std::unique_ptr<\(anonymous namespace\)::Parent \[\], base::DefaultDeleter<\(anonymous namespace\)::Parent \[\]> >'"]
 
 void WontCompile() {
-  scoped_ptr<Parent[]> x(new Child[1]);
+  std::unique_ptr<Parent[]> x(new Child[1]);
 }
 
 #elif defined(NCTEST_NO_RESET_SCOPED_PTR_ARRAY_FROM_NULL)  // [r"is ambiguous"]
 
 void WontCompile() {
-  scoped_ptr<int[]> x;
+  std::unique_ptr<int[]> x;
   x.reset(NULL);
 }
 
-#elif defined(NCTEST_NO_RESET_SCOPED_PTR_ARRAY_FROM_DERIVED)  // [r"fatal error: 'reset' is a private member of 'scoped_ptr<\(anonymous namespace\)::Parent \[\], base::DefaultDeleter<\(anonymous namespace\)::Parent \[\]> >'"]
+#elif defined(NCTEST_NO_RESET_SCOPED_PTR_ARRAY_FROM_DERIVED)  // [r"fatal error: 'reset' is a private member of 'std::unique_ptr<\(anonymous namespace\)::Parent \[\], base::DefaultDeleter<\(anonymous namespace\)::Parent \[\]> >'"]
 
 void WontCompile() {
-  scoped_ptr<Parent[]> x;
+  std::unique_ptr<Parent[]> x;
   x.reset(new Child[1]);
 }
 
@@ -107,7 +107,7 @@ struct Deleter {
 void WontCompile() {
   Deleter d;
   int n;
-  scoped_ptr<int*, Deleter&> a(&n, d);
+  std::unique_ptr<int*, Deleter&> a(&n, d);
 }
 
 #endif

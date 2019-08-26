@@ -60,7 +60,7 @@ void CheckJSONIsStillTheSame(Value& value) {
 }
 
 void ValidateJsonList(const std::string& json) {
-  scoped_ptr<Value> root(JSONReader::Read(json));
+  std::unique_ptr<Value> root(JSONReader::Read(json));
   ASSERT_TRUE(root.get() && root->IsType(Value::TYPE_LIST));
   ListValue* list = static_cast<ListValue*>(root.get());
   ASSERT_EQ(1U, list->GetSize());
@@ -79,7 +79,7 @@ TEST(JSONValueSerializerTest, ReadProperJSONFromString) {
 
   int error_code = 0;
   std::string error_message;
-  scoped_ptr<Value> value(
+  std::unique_ptr<Value> value(
       str_deserializer.Deserialize(&error_code, &error_message));
   ASSERT_TRUE(value.get());
   ASSERT_EQ(0, error_code);
@@ -97,7 +97,7 @@ TEST(JSONValueSerializerTest, ReadJSONWithTrailingCommasFromString) {
 
   int error_code = 0;
   std::string error_message;
-  scoped_ptr<Value> value(
+  std::unique_ptr<Value> value(
       str_deserializer.Deserialize(&error_code, &error_message));
   ASSERT_FALSE(value.get());
   ASSERT_NE(0, error_code);
@@ -125,7 +125,7 @@ TEST(JSONValueSerializerTest, ReadProperJSONFromFile) {
 
   int error_code = 0;
   std::string error_message;
-  scoped_ptr<Value> value(
+  std::unique_ptr<Value> value(
       file_deserializer.Deserialize(&error_code, &error_message));
   ASSERT_TRUE(value.get());
   ASSERT_EQ(0, error_code);
@@ -150,7 +150,7 @@ TEST(JSONValueSerializerTest, ReadJSONWithCommasFromFile) {
   // This must fail without the proper flag.
   int error_code = 0;
   std::string error_message;
-  scoped_ptr<Value> value(
+  std::unique_ptr<Value> value(
       file_deserializer.Deserialize(&error_code, &error_message));
   ASSERT_FALSE(value.get());
   ASSERT_NE(0, error_code);
@@ -168,7 +168,7 @@ TEST(JSONValueSerializerTest, Roundtrip) {
   const std::string original_serialization =
     "{\"bool\":true,\"double\":3.14,\"int\":42,\"list\":[1,2],\"null\":null}";
   JSONStringValueSerializer serializer(original_serialization);
-  scoped_ptr<Value> root(serializer.Deserialize(NULL, NULL));
+  std::unique_ptr<Value> root(serializer.Deserialize(NULL, NULL));
   ASSERT_TRUE(root.get());
   ASSERT_TRUE(root->IsType(Value::TYPE_DICTIONARY));
 
@@ -282,7 +282,7 @@ TEST(JSONValueSerializerTest, UnicodeStrings) {
 
   // escaped ascii text -> json
   JSONStringValueSerializer deserializer(expected);
-  scoped_ptr<Value> deserial_root(deserializer.Deserialize(NULL, NULL));
+  std::unique_ptr<Value> deserial_root(deserializer.Deserialize(NULL, NULL));
   ASSERT_TRUE(deserial_root.get());
   DictionaryValue* dict_root =
       static_cast<DictionaryValue*>(deserial_root.get());
@@ -306,7 +306,7 @@ TEST(JSONValueSerializerTest, HexStrings) {
 
   // escaped ascii text -> json
   JSONStringValueSerializer deserializer(expected);
-  scoped_ptr<Value> deserial_root(deserializer.Deserialize(NULL, NULL));
+  std::unique_ptr<Value> deserial_root(deserializer.Deserialize(NULL, NULL));
   ASSERT_TRUE(deserial_root.get());
   DictionaryValue* dict_root =
       static_cast<DictionaryValue*>(deserial_root.get());
@@ -325,8 +325,8 @@ TEST(JSONValueSerializerTest, HexStrings) {
 }
 
 TEST(JSONValueSerializerTest, AllowTrailingComma) {
-  scoped_ptr<Value> root;
-  scoped_ptr<Value> root_expected;
+  std::unique_ptr<Value> root;
+  std::unique_ptr<Value> root_expected;
   std::string test_with_commas("{\"key\": [true,],}");
   std::string test_no_commas("{\"key\": [true]}");
 
@@ -348,7 +348,7 @@ TEST(JSONValueSerializerTest, JSONReaderComments) {
   ValidateJsonList("[ 1 /* one */ ] /* end */");
   ValidateJsonList("[ 1 //// ,2\r\n ]");
 
-  scoped_ptr<Value> root;
+  std::unique_ptr<Value> root;
 
   // It's ok to have a comment in a string.
   root.reset(JSONReader::Read("[\"// ok\\n /* foo */ \"]"));
@@ -386,7 +386,7 @@ TEST_F(JSONFileValueSerializerTest, Roundtrip) {
   ASSERT_TRUE(PathExists(original_file_path));
 
   JSONFileValueSerializer deserializer(original_file_path);
-  scoped_ptr<Value> root;
+  std::unique_ptr<Value> root;
   root.reset(deserializer.Deserialize(NULL, NULL));
 
   ASSERT_TRUE(root.get());
@@ -434,7 +434,7 @@ TEST_F(JSONFileValueSerializerTest, RoundtripNested) {
   ASSERT_TRUE(PathExists(original_file_path));
 
   JSONFileValueSerializer deserializer(original_file_path);
-  scoped_ptr<Value> root;
+  std::unique_ptr<Value> root;
   root.reset(deserializer.Deserialize(NULL, NULL));
   ASSERT_TRUE(root.get());
 
@@ -459,7 +459,7 @@ TEST_F(JSONFileValueSerializerTest, NoWhitespace) {
       FILE_PATH_LITERAL("serializer_test_nowhitespace.json"));
   ASSERT_TRUE(PathExists(source_file_path));
   JSONFileValueSerializer serializer(source_file_path);
-  scoped_ptr<Value> root;
+  std::unique_ptr<Value> root;
   root.reset(serializer.Deserialize(NULL, NULL));
   ASSERT_TRUE(root.get());
 }

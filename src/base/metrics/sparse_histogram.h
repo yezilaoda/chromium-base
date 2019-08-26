@@ -44,7 +44,7 @@ class BASE_EXPORT_PRIVATE SparseHistogram : public HistogramBase {
   void Add(Sample value) override;
   void AddSamples(const HistogramSamples& samples) override;
   bool AddSamplesFromPickle(PickleIterator* iter) override;
-  scoped_ptr<HistogramSamples> SnapshotSamples() const override;
+  std::unique_ptr<HistogramSamples> SnapshotSamples() const override;
   void WriteHTMLGraph(std::string* output) const override;
   void WriteAscii(std::string* output) const override;
 

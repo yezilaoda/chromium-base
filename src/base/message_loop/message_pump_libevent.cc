@@ -158,7 +158,7 @@ bool MessagePumpLibevent::WatchFileDescriptor(int fd,
     event_mask |= EV_WRITE;
   }
 
-  scoped_ptr<event> evt(controller->ReleaseEvent());
+  std::unique_ptr<event> evt(controller->ReleaseEvent());
   if (evt.get() == NULL) {
     // Ownership is transferred to the controller.
     evt.reset(new event);
@@ -224,7 +224,7 @@ void MessagePumpLibevent::Run(Delegate* delegate) {
 
   // event_base_loopexit() + EVLOOP_ONCE is leaky, see http://crbug.com/25641.
   // Instead, make our own timer and reuse it on each call to event_base_loop().
-  scoped_ptr<event> timer_event(new event);
+  std::unique_ptr<event> timer_event(new event);
 
   for (;;) {
 #if defined(OS_MACOSX)

@@ -166,9 +166,9 @@ bool PrefService::HasPrefPath(const std::string& path) const {
   return pref && !pref->IsDefaultValue();
 }
 
-scoped_ptr<base::DictionaryValue> PrefService::GetPreferenceValues() const {
+std::unique_ptr<base::DictionaryValue> PrefService::GetPreferenceValues() const {
   DCHECK(CalledOnValidThread());
-  scoped_ptr<base::DictionaryValue> out(new base::DictionaryValue);
+  std::unique_ptr<base::DictionaryValue> out(new base::DictionaryValue);
   for (const auto& it : *pref_registry_) {
     const base::Value* value = GetPreferenceValue(it.first);
     out->Set(it.first, value->DeepCopy());
@@ -176,10 +176,10 @@ scoped_ptr<base::DictionaryValue> PrefService::GetPreferenceValues() const {
   return out.Pass();
 }
 
-scoped_ptr<base::DictionaryValue> PrefService::GetPreferenceValuesOmitDefaults()
+std::unique_ptr<base::DictionaryValue> PrefService::GetPreferenceValuesOmitDefaults()
     const {
   DCHECK(CalledOnValidThread());
-  scoped_ptr<base::DictionaryValue> out(new base::DictionaryValue);
+  std::unique_ptr<base::DictionaryValue> out(new base::DictionaryValue);
   for (const auto& it : *pref_registry_) {
     const Preference* pref = FindPreference(it.first);
     if (pref->IsDefaultValue())
@@ -189,10 +189,10 @@ scoped_ptr<base::DictionaryValue> PrefService::GetPreferenceValuesOmitDefaults()
   return out.Pass();
 }
 
-scoped_ptr<base::DictionaryValue>
+std::unique_ptr<base::DictionaryValue>
 PrefService::GetPreferenceValuesWithoutPathExpansion() const {
   DCHECK(CalledOnValidThread());
-  scoped_ptr<base::DictionaryValue> out(new base::DictionaryValue);
+  std::unique_ptr<base::DictionaryValue> out(new base::DictionaryValue);
   for (const auto& it : *pref_registry_) {
     const base::Value* value = GetPreferenceValue(it.first);
     DCHECK(value);
@@ -459,7 +459,7 @@ void PrefService::ReportUserPrefChanged(const std::string& key) {
 
 void PrefService::SetUserPrefValue(const std::string& path,
                                    base::Value* new_value) {
-  scoped_ptr<base::Value> owned_value(new_value);
+  std::unique_ptr<base::Value> owned_value(new_value);
   DCHECK(CalledOnValidThread());
 
   const Preference* pref = FindPreference(path);

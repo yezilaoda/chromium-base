@@ -56,7 +56,7 @@ typedef ScopedGeneric<int, internal::ScopedFDCloseTraits> ScopedFD;
 #endif
 
 // Automatically closes |FILE*|s.
-typedef scoped_ptr<FILE, internal::ScopedFILECloser> ScopedFILE;
+typedef std::unique_ptr<FILE, internal::ScopedFILECloser> ScopedFILE;
 
 }  // namespace base
 

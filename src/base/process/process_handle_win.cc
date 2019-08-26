@@ -93,7 +93,7 @@ bool GetProcessIntegrityLevel(ProcessHandle process, IntegrityLevel *level) {
       GetLastError() != ERROR_INSUFFICIENT_BUFFER)
     return false;
 
-  scoped_ptr<char[]> token_label_bytes(new char[token_info_length]);
+  std::unique_ptr<char[]> token_label_bytes(new char[token_info_length]);
   if (!token_label_bytes.get())
     return false;
 

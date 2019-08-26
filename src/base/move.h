@@ -156,9 +156,9 @@
 // This emulation also has a deficiency where it uses up the single
 // user-defined conversion allowed by C++ during initialization.  This can
 // cause problems in some API edge cases.  For instance, in scoped_ptr, it is
-// impossible to make a function "void Foo(scoped_ptr<Parent> p)" accept a
-// value of type scoped_ptr<Child> even if you add a constructor to
-// scoped_ptr<> that would make it look like it should work.  C++11 does not
+// impossible to make a function "void Foo(std::unique_ptr<Parent> p)" accept a
+// value of type std::unique_ptr<Child> even if you add a constructor to
+// std::unique_ptr<> that would make it look like it should work.  C++11 does not
 // have this deficiency.
 //
 //

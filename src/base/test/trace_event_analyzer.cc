@@ -647,7 +647,7 @@ size_t FindMatchingEvents(const std::vector<TraceEvent>& events,
 
 bool ParseEventsFromJson(const std::string& json,
                          std::vector<TraceEvent>* output) {
-  scoped_ptr<base::Value> root;
+  std::unique_ptr<base::Value> root;
   root.reset(base::JSONReader::Read(json));
 
   base::ListValue* root_list = NULL;
@@ -681,7 +681,7 @@ TraceAnalyzer::~TraceAnalyzer() {
 
 // static
 TraceAnalyzer* TraceAnalyzer::Create(const std::string& json_events) {
-  scoped_ptr<TraceAnalyzer> analyzer(new TraceAnalyzer());
+  std::unique_ptr<TraceAnalyzer> analyzer(new TraceAnalyzer());
   if (analyzer->SetEvents(json_events))
     return analyzer.release();
   return NULL;

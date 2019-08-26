@@ -168,7 +168,7 @@ class BASE_EXPORT Histogram : public HistogramBase {
                                 Sample expected_maximum,
                                 size_t expected_bucket_count) const override;
   void Add(Sample value) override;
-  scoped_ptr<HistogramSamples> SnapshotSamples() const override;
+  std::unique_ptr<HistogramSamples> SnapshotSamples() const override;
   void AddSamples(const HistogramSamples& samples) override;
   bool AddSamplesFromPickle(PickleIterator* iter) override;
   void WriteHTMLGraph(std::string* output) const override;
@@ -214,7 +214,7 @@ class BASE_EXPORT Histogram : public HistogramBase {
   static HistogramBase* DeserializeInfoImpl(PickleIterator* iter);
 
   // Implementation of SnapshotSamples function.
-  scoped_ptr<SampleVector> SnapshotSampleVector() const;
+  std::unique_ptr<SampleVector> SnapshotSampleVector() const;
 
   //----------------------------------------------------------------------------
   // Helpers for emitting Ascii graphic.  Each method appends data to output.
@@ -252,7 +252,7 @@ class BASE_EXPORT Histogram : public HistogramBase {
 
   // Finally, provide the state that changes with the addition of each new
   // sample.
-  scoped_ptr<SampleVector> samples_;
+  std::unique_ptr<SampleVector> samples_;
 
   DISALLOW_COPY_AND_ASSIGN(Histogram);
 };

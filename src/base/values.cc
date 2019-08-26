@@ -294,44 +294,6 @@ bool StringValue::Equals(const Value* other) const {
   return GetAsString(&lhs) && other->GetAsString(&rhs) && lhs == rhs;
 }
 
-///////////////////// BinaryValue ////////////////////
-
-BinaryValue::BinaryValue()
-    : Value(TYPE_BINARY),
-      size_(0) {
-}
-
-BinaryValue::BinaryValue(scoped_ptr<char[]> buffer, size_t size)
-    : Value(TYPE_BINARY),
-      buffer_(buffer.Pass()),
-      size_(size) {
-}
-
-BinaryValue::~BinaryValue() {
-}
-
-// static
-BinaryValue* BinaryValue::CreateWithCopiedBuffer(const char* buffer,
-                                                 size_t size) {
-  char* buffer_copy = new char[size];
-  memcpy(buffer_copy, buffer, size);
-  scoped_ptr<char[]> scoped_buffer_copy(buffer_copy);
-  return new BinaryValue(scoped_buffer_copy.Pass(), size);
-}
-
-BinaryValue* BinaryValue::DeepCopy() const {
-  return CreateWithCopiedBuffer(buffer_.get(), size_);
-}
-
-bool BinaryValue::Equals(const Value* other) const {
-  if (other->GetType() != GetType())
-    return false;
-  const BinaryValue* other_binary = static_cast<const BinaryValue*>(other);
-  if (other_binary->size_ != size_)
-    return false;
-  return !memcmp(GetBuffer(), other_binary->GetBuffer(), size_);
-}
-
 ///////////////////// DictionaryValue ////////////////////
 
 DictionaryValue::DictionaryValue()
@@ -542,23 +504,21 @@ bool DictionaryValue::GetStringASCII(const std::string& path,
 }
 
 bool DictionaryValue::GetBinary(const std::string& path,
-                                const BinaryValue** out_value) const {
+                                const Value** out_value) const {
   const Value* value;
   bool result = Get(path, &value);
   if (!result || !value->IsType(TYPE_BINARY))
     return false;
 
   if (out_value)
-    *out_value = static_cast<const BinaryValue*>(value);
+    *out_value = value;
 
   return true;
 }
 
-bool DictionaryValue::GetBinary(const std::string& path,
-                                BinaryValue** out_value) {
+bool DictionaryValue::GetBinary(const std::string& path, Value** out_value) {
   return static_cast<const DictionaryValue&>(*this).GetBinary(
-      path,
-      const_cast<const BinaryValue**>(out_value));
+      path, const_cast<const Value**>(out_value));
 }
 
 bool DictionaryValue::GetDictionary(const std::string& path,
@@ -713,7 +673,7 @@ bool DictionaryValue::GetListWithoutPathExpansion(const std::string& key,
 }
 
 bool DictionaryValue::Remove(const std::string& path,
-                             scoped_ptr<Value>* out_value) {
+                             std::unique_ptr<Value>* out_value) {
   DCHECK(IsStringUTF8(path));
   std::string current_path(path);
   DictionaryValue* current_dictionary = this;
@@ -730,7 +690,7 @@ bool DictionaryValue::Remove(const std::string& path,
 }
 
 bool DictionaryValue::RemoveWithoutPathExpansion(const std::string& key,
-                                                 scoped_ptr<Value>* out_value) {
+                                                 std::unique_ptr<Value>* out_value) {
   DCHECK(IsStringUTF8(key));
   ValueMap::iterator entry_iterator = dictionary_.find(key);
   if (entry_iterator == dictionary_.end())
@@ -746,7 +706,7 @@ bool DictionaryValue::RemoveWithoutPathExpansion(const std::string& key,
 }
 
 bool DictionaryValue::RemovePath(const std::string& path,
-                                 scoped_ptr<Value>* out_value) {
+                                 std::unique_ptr<Value>* out_value) {
   bool result = false;
   size_t delimiter_position = path.find('.');
 
@@ -919,22 +879,21 @@ bool ListValue::GetString(size_t index, string16* out_value) const {
   return value->GetAsString(out_value);
 }
 
-bool ListValue::GetBinary(size_t index, const BinaryValue** out_value) const {
+bool ListValue::GetBinary(size_t index, const Value** out_value) const {
   const Value* value;
   bool result = Get(index, &value);
   if (!result || !value->IsType(TYPE_BINARY))
     return false;
 
   if (out_value)
-    *out_value = static_cast<const BinaryValue*>(value);
+    *out_value = static_cast<const Value*>(value);
 
   return true;
 }
 
-bool ListValue::GetBinary(size_t index, BinaryValue** out_value) {
+bool ListValue::GetBinary(size_t index, Value** out_value) {
   return static_cast<const ListValue&>(*this).GetBinary(
-      index,
-      const_cast<const BinaryValue**>(out_value));
+      index, const_cast<const Value**>(out_value));
 }
 
 bool ListValue::GetDictionary(size_t index,
@@ -974,7 +933,7 @@ bool ListValue::GetList(size_t index, ListValue** out_value) {
       const_cast<const ListValue**>(out_value));
 }
 
-bool ListValue::Remove(size_t index, scoped_ptr<Value>* out_value) {
+bool ListValue::Remove(size_t index, std::unique_ptr<Value>* out_value) {
   if (index >= list_.size())
     return false;
 
@@ -1003,7 +962,7 @@ bool ListValue::Remove(const Value& value, size_t* index) {
 }
 
 ListValue::iterator ListValue::Erase(iterator iter,
-                                     scoped_ptr<Value>* out_value) {
+                                     std::unique_ptr<Value>* out_value) {
   if (out_value)
     out_value->reset(*iter);
   else

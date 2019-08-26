@@ -19,7 +19,7 @@ namespace base {
 
 TEST(JSONReaderTest, Reading) {
   // some whitespace checking
-  scoped_ptr<Value> root;
+  std::unique_ptr<Value> root;
   root.reset(JSONReader().ReadToValue("   null   "));
   ASSERT_TRUE(root.get());
   EXPECT_TRUE(root->IsType(Value::TYPE_NULL));
@@ -249,7 +249,7 @@ TEST(JSONReaderTest, Reading) {
   EXPECT_EQ(3U, list->GetSize());
 
   // Test with trailing comma.  Should be parsed the same as above.
-  scoped_ptr<Value> root2;
+  std::unique_ptr<Value> root2;
   root2.reset(JSONReader::Read("[true, false, null, ]",
                                JSON_ALLOW_TRAILING_COMMAS));
   EXPECT_TRUE(root->Equals(root2.get()));
@@ -551,7 +551,7 @@ TEST(JSONReaderTest, ReadFromFile) {
       path.Append(FILE_PATH_LITERAL("bom_feff.json")), &input));
 
   JSONReader reader;
-  scoped_ptr<Value> root(reader.ReadToValue(input));
+  std::unique_ptr<Value> root(reader.ReadToValue(input));
   ASSERT_TRUE(root.get()) << reader.GetErrorMessage();
   EXPECT_TRUE(root->IsType(Value::TYPE_DICTIONARY));
 }
@@ -559,15 +559,15 @@ TEST(JSONReaderTest, ReadFromFile) {
 // Tests that the root of a JSON object can be deleted safely while its
 // children outlive it.
 TEST(JSONReaderTest, StringOptimizations) {
-  scoped_ptr<Value> dict_literal_0;
-  scoped_ptr<Value> dict_literal_1;
-  scoped_ptr<Value> dict_string_0;
-  scoped_ptr<Value> dict_string_1;
-  scoped_ptr<Value> list_value_0;
-  scoped_ptr<Value> list_value_1;
+  std::unique_ptr<Value> dict_literal_0;
+  std::unique_ptr<Value> dict_literal_1;
+  std::unique_ptr<Value> dict_string_0;
+  std::unique_ptr<Value> dict_string_1;
+  std::unique_ptr<Value> list_value_0;
+  std::unique_ptr<Value> list_value_1;
 
   {
-    scoped_ptr<Value> root(JSONReader::Read(
+    std::unique_ptr<Value> root(JSONReader::Read(
         "{"
         "  \"test\": {"
         "    \"foo\": true,"

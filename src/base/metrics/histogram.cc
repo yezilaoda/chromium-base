@@ -267,7 +267,7 @@ void Histogram::Add(int value) {
   samples_->Accumulate(value, 1);
 }
 
-scoped_ptr<HistogramSamples> Histogram::SnapshotSamples() const {
+std::unique_ptr<HistogramSamples> Histogram::SnapshotSamples() const {
   return SnapshotSampleVector().Pass();
 }
 
@@ -366,8 +366,8 @@ HistogramBase* Histogram::DeserializeInfoImpl(PickleIterator* iter) {
   return histogram;
 }
 
-scoped_ptr<SampleVector> Histogram::SnapshotSampleVector() const {
-  scoped_ptr<SampleVector> samples(new SampleVector(bucket_ranges()));
+std::unique_ptr<SampleVector> Histogram::SnapshotSampleVector() const {
+  std::unique_ptr<SampleVector> samples(new SampleVector(bucket_ranges()));
   samples->Add(*samples_);
   return samples;
 }
@@ -377,7 +377,7 @@ void Histogram::WriteAsciiImpl(bool graph_it,
                                string* output) const {
   // Get local (stack) copies of all effectively volatile class data so that we
   // are consistent across our output activities.
-  scoped_ptr<SampleVector> snapshot = SnapshotSampleVector();
+  std::unique_ptr<SampleVector> snapshot = SnapshotSampleVector();
   Count sample_count = snapshot->TotalCount();
 
   WriteAsciiHeader(*snapshot, sample_count, output);
@@ -490,14 +490,14 @@ void Histogram::GetParameters(DictionaryValue* params) const {
 void Histogram::GetCountAndBucketData(Count* count,
                                       int64* sum,
                                       ListValue* buckets) const {
-  scoped_ptr<SampleVector> snapshot = SnapshotSampleVector();
+  std::unique_ptr<SampleVector> snapshot = SnapshotSampleVector();
   *count = snapshot->TotalCount();
   *sum = snapshot->sum();
   size_t index = 0;
   for (size_t i = 0; i < bucket_count(); ++i) {
     Sample count = snapshot->GetCountAtIndex(i);
     if (count > 0) {
-      scoped_ptr<DictionaryValue> bucket_value(new DictionaryValue());
+      std::unique_ptr<DictionaryValue> bucket_value(new DictionaryValue());
       bucket_value->SetInteger("low", ranges(i));
       if (i != bucket_count() - 1)
         bucket_value->SetInteger("high", ranges(i + 1));

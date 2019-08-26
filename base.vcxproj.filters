@@ -4128,5 +4128,134 @@
     <ClInclude Include="src\base\win\windows_types.h">
       <Filter>src\base\win</Filter>
     </ClInclude>
+    <ClInclude Include="src\base\async_socket_io_handler.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\atomic_sequence_num.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\atomicops_internals_arm64_gcc.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\atomicops_internals_portable.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\auto_reset.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\barrier_closure.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\base_paths.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\base_paths_win.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\big_endian.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\bits.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\build_time.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\callback_list.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\critical_closure.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\deferred_sequenced_task_runner.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\environment.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\event_recorder.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\event_types.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\float_util.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\format_macros.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\gtest_prod_util.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\guid.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\id_map.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\logging_win.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\macros.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\md5.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\native_library.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\observer_list.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\observer_list_threadsafe.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\os_compat_nacl.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\scoped_generic.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\scoped_native_library.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\scoped_observer.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\sequenced_task_runner_helpers.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\sha1.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\single_thread_task_runner.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\supports_user_data.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\sync_socket.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\sys_byteorder.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\sys_info_internal.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\task_runner_util.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\value_conversions.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\values.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\version.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

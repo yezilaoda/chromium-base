@@ -6,6 +6,7 @@
 #define BASE_THREADING_THREAD_H_
 
 #include <string>
+#include <memory>
 
 #include "base/base_export.h"
 #include "base/callback.h"

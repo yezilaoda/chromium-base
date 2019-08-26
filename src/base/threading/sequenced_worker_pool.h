@@ -7,6 +7,7 @@
 
 #include <cstddef>
 #include <string>
+#include <memory>
 
 #include "base/base_export.h"
 #include "base/basictypes.h"

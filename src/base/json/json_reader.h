@@ -29,6 +29,7 @@
 #define BASE_JSON_JSON_READER_H_
 
 #include <string>
+#include <memory>
 
 #include "base/base_export.h"
 #include "base/basictypes.h"

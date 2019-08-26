@@ -22,6 +22,7 @@
 #include <set>
 #include <string>
 #include <vector>
+#include <memory>
 
 #include "base/base_export.h"
 #include "base/basictypes.h"

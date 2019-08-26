@@ -21,6 +21,8 @@
 #include <time.h>
 #include <unistd.h>
 
+#include <memory>
+
 #if defined(OS_MACOSX)
 #include <AvailabilityMacros.h>
 #include "base/mac/foundation_util.h"

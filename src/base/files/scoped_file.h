@@ -7,6 +7,8 @@
 
 #include <stdio.h>
 
+#include <memory>
+
 #include "base/base_export.h"
 #include "base/logging.h"
 #include "base/memory/scoped_ptr.h"

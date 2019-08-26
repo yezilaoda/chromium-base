@@ -5,6 +5,7 @@
 #if defined(OS_WIN)
 #include <windows.h>
 #endif
+#include <memory>
 
 #include "base/debug/alias.h"
 #include "base/debug/asan_invalid_access.h"

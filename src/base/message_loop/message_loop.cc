@@ -5,6 +5,7 @@
 #include "base/message_loop/message_loop.h"
 
 #include <algorithm>
+#include <memory>
 
 #include "base/bind.h"
 #include "base/compiler_specific.h"

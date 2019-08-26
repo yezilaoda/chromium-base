@@ -13,6 +13,7 @@
 
 #include <ios>
 #include <limits>
+#include <memory>
 
 #include "base/bind.h"
 #include "base/bind_helpers.h"

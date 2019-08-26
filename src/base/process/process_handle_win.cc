@@ -5,6 +5,7 @@
 #include "base/process/process_handle.h"
 
 #include <windows.h>
+#include <memory>
 
 #include "base/memory/scoped_ptr.h"
 #include "base/win/scoped_handle.h"

@@ -8,6 +8,8 @@
 #include <fcntl.h>
 #include <unistd.h>
 
+#include <memory>
+
 #include "base/auto_reset.h"
 #include "base/compiler_specific.h"
 #include "base/logging.h"

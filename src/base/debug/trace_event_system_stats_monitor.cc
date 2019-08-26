@@ -4,6 +4,8 @@
 
 #include "base/debug/trace_event_system_stats_monitor.h"
 
+#include <memory>
+
 #include "base/debug/leak_annotations.h"
 #include "base/debug/trace_event.h"
 #include "base/json/json_writer.h"

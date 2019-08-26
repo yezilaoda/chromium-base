@@ -8,6 +8,7 @@
 
 #include <ostream>
 #include <string>
+#include <memory>
 
 #include "base/base_paths.h"
 #include "base/environment.h"

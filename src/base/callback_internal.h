@@ -9,6 +9,7 @@
 #define BASE_CALLBACK_INTERNAL_H_
 
 #include <stddef.h>
+#include <memory>
 
 #include "base/base_export.h"
 #include "base/memory/ref_counted.h"

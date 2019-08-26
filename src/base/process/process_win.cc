@@ -4,6 +4,8 @@
 
 #include "base/process/process.h"
 
+#include <memory>
+
 #include "base/logging.h"
 #include "base/memory/scoped_ptr.h"
 #include "base/process/kill.h"

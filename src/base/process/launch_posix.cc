@@ -18,6 +18,7 @@
 #include <iterator>
 #include <limits>
 #include <set>
+#include <memory>
 
 #include "base/allocator/type_profiler_control.h"
 #include "base/command_line.h"

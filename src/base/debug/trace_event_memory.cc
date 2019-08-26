@@ -4,6 +4,8 @@
 
 #include "base/debug/trace_event_memory.h"
 
+#include <memory>
+
 #include "base/debug/leak_annotations.h"
 #include "base/debug/trace_event.h"
 #include "base/lazy_instance.h"

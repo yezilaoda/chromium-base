@@ -18,6 +18,7 @@
 #include <ostream>
 #include <string>
 #include <vector>
+#include <memory>
 
 #if defined(__GLIBCXX__)
 #include <cxxabi.h>
@@ -29,6 +30,7 @@
 #if defined(OS_MACOSX)
 #include <AvailabilityMacros.h>
 #endif
+
 
 #include "base/basictypes.h"
 #include "base/debug/debugger.h"

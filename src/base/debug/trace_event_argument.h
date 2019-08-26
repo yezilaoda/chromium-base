@@ -7,6 +7,7 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 
 #include "base/debug/trace_event.h"
 #include "base/memory/scoped_ptr.h"

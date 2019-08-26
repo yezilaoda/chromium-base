@@ -4,6 +4,8 @@
 
 #include "base/json/json_parser.h"
 
+#include <memory>
+
 #include "base/float_util.h"
 #include "base/logging.h"
 #include "base/memory/scoped_ptr.h"

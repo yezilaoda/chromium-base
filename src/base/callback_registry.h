@@ -6,6 +6,7 @@
 #define BASE_CALLBACK_REGISTRY_H_
 
 #include <list>
+#include <memory>
 
 #include "base/basictypes.h"
 #include "base/callback.h"

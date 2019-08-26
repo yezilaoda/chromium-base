@@ -33,6 +33,7 @@
 #endif
 
 #include <ostream>
+#include <memory>
 
 #include "base/basictypes.h"
 #include "base/logging.h"

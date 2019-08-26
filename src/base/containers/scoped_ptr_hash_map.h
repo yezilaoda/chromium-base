@@ -7,6 +7,7 @@
 
 #include <algorithm>
 #include <utility>
+#include <memory>
 
 #include "base/basictypes.h"
 #include "base/containers/hash_tables.h"

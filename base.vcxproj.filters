@@ -3198,45 +3198,6 @@
     <ClInclude Include="src\base\debug\trace_event.h">
       <Filter>src\base\debug</Filter>
     </ClInclude>
-    <ClCompile Include="src\base\debug\trace_event_argument.cc">
-      <Filter>src\base\debug</Filter>
-    </ClCompile>
-    <ClInclude Include="src\base\debug\trace_event_argument.h">
-      <Filter>src\base\debug</Filter>
-    </ClInclude>
-    <ClCompile Include="src\base\debug\trace_event_impl.cc">
-      <Filter>src\base\debug</Filter>
-    </ClCompile>
-    <ClInclude Include="src\base\debug\trace_event_impl.h">
-      <Filter>src\base\debug</Filter>
-    </ClInclude>
-    <ClCompile Include="src\base\debug\trace_event_impl_constants.cc">
-      <Filter>src\base\debug</Filter>
-    </ClCompile>
-    <ClCompile Include="src\base\debug\trace_event_memory.cc">
-      <Filter>src\base\debug</Filter>
-    </ClCompile>
-    <ClInclude Include="src\base\debug\trace_event_memory.h">
-      <Filter>src\base\debug</Filter>
-    </ClInclude>
-    <ClCompile Include="src\base\debug\trace_event_synthetic_delay.cc">
-      <Filter>src\base\debug</Filter>
-    </ClCompile>
-    <ClInclude Include="src\base\debug\trace_event_synthetic_delay.h">
-      <Filter>src\base\debug</Filter>
-    </ClInclude>
-    <ClCompile Include="src\base\debug\trace_event_system_stats_monitor.cc">
-      <Filter>src\base\debug</Filter>
-    </ClCompile>
-    <ClInclude Include="src\base\debug\trace_event_system_stats_monitor.h">
-      <Filter>src\base\debug</Filter>
-    </ClInclude>
-    <ClCompile Include="src\base\debug\trace_event_win.cc">
-      <Filter>src\base\debug</Filter>
-    </ClCompile>
-    <ClInclude Include="src\base\debug\trace_event_win.h">
-      <Filter>src\base\debug</Filter>
-    </ClInclude>
     <ClCompile Include="src\base\environment.cc">
       <Filter>src\base</Filter>
     </ClCompile>
@@ -4256,6 +4217,9 @@
     </ClInclude>
     <ClInclude Include="src\base\version.h">
       <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\containers\adapters.h">
+      <Filter>src\base\containers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

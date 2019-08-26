@@ -148,6 +148,7 @@
     <ClInclude Include="src\base\cancelable_callback.h" />
     <ClInclude Include="src\base\command_line.h" />
     <ClInclude Include="src\base\compiler_specific.h" />
+    <ClInclude Include="src\base\containers\adapters.h" />
     <ClInclude Include="src\base\containers\circular_deque.h" />
     <ClInclude Include="src\base\containers\hash_tables.h" />
     <ClInclude Include="src\base\containers\linked_list.h" />
@@ -171,12 +172,6 @@
     <ClInclude Include="src\base\debug\stack_trace.h" />
     <ClInclude Include="src\base\debug\task_annotator.h" />
     <ClInclude Include="src\base\debug\trace_event.h" />
-    <ClInclude Include="src\base\debug\trace_event_argument.h" />
-    <ClInclude Include="src\base\debug\trace_event_impl.h" />
-    <ClInclude Include="src\base\debug\trace_event_memory.h" />
-    <ClInclude Include="src\base\debug\trace_event_synthetic_delay.h" />
-    <ClInclude Include="src\base\debug\trace_event_system_stats_monitor.h" />
-    <ClInclude Include="src\base\debug\trace_event_win.h" />
     <ClInclude Include="src\base\deferred_sequenced_task_runner.h" />
     <ClInclude Include="src\base\environment.h" />
     <ClInclude Include="src\base\event_recorder.h" />
@@ -376,13 +371,6 @@
     <ClCompile Include="src\base\debug\stack_trace.cc" />
     <ClCompile Include="src\base\debug\stack_trace_win.cc" />
     <ClCompile Include="src\base\debug\task_annotator.cc" />
-    <ClCompile Include="src\base\debug\trace_event_argument.cc" />
-    <ClCompile Include="src\base\debug\trace_event_impl.cc" />
-    <ClCompile Include="src\base\debug\trace_event_impl_constants.cc" />
-    <ClCompile Include="src\base\debug\trace_event_memory.cc" />
-    <ClCompile Include="src\base\debug\trace_event_synthetic_delay.cc" />
-    <ClCompile Include="src\base\debug\trace_event_system_stats_monitor.cc" />
-    <ClCompile Include="src\base\debug\trace_event_win.cc" />
     <ClCompile Include="src\base\environment.cc" />
     <ClCompile Include="src\base\files\file.cc" />
     <ClCompile Include="src\base\files\file_enumerator.cc" />

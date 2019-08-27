@@ -254,7 +254,6 @@
     <ClInclude Include="src\base\scoped_observer.h" />
     <ClInclude Include="src\base\sequenced_task_runner_helpers.h" />
     <ClInclude Include="src\base\sequence_checker.h" />
-    <ClInclude Include="src\base\sequence_checker_impl.h" />
     <ClInclude Include="src\base\sequenced_task_runner.h" />
     <ClInclude Include="src\base\sha1.h" />
     <ClInclude Include="src\base\single_thread_task_runner.h" />
@@ -429,7 +428,6 @@
     <ClCompile Include="src\base\rand_util_win.cc" />
     <ClCompile Include="src\base\run_loop.cc" />
     <ClCompile Include="src\base\scoped_clear_last_error_win.cc" />
-    <ClCompile Include="src\base\sequence_checker_impl.cc" />
     <ClCompile Include="src\base\sequenced_task_runner.cc" />
     <ClCompile Include="src\base\strings\string_number_conversions.cc" />
     <ClCompile Include="src\base\strings\string_piece.cc" />

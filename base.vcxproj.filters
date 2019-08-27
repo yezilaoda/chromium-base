@@ -3525,12 +3525,6 @@
     <ClInclude Include="src\base\sequence_checker.h">
       <Filter>src\base</Filter>
     </ClInclude>
-    <ClCompile Include="src\base\sequence_checker_impl.cc">
-      <Filter>src\base</Filter>
-    </ClCompile>
-    <ClInclude Include="src\base\sequence_checker_impl.h">
-      <Filter>src\base</Filter>
-    </ClInclude>
     <ClCompile Include="src\base\sequenced_task_runner.cc">
       <Filter>src\base</Filter>
     </ClCompile>

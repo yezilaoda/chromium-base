@@ -12,8 +12,6 @@
 #define ENABLE_SEQUENCE_CHECKER 0
 #endif
 
-#include "base/sequence_checker_impl.h"
-
 namespace base {
 
 // Do nothing implementation, for use in release mode.

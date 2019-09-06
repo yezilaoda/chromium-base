@@ -3066,16 +3066,10 @@
     <ClInclude Include="src\base\bind.h">
       <Filter>src\base</Filter>
     </ClInclude>
-    <ClCompile Include="src\base\bind_helpers.cc">
-      <Filter>src\base</Filter>
-    </ClCompile>
     <ClInclude Include="src\base\bind_helpers.h">
       <Filter>src\base</Filter>
     </ClInclude>
     <ClInclude Include="src\base\bind_internal.h">
-      <Filter>src\base</Filter>
-    </ClInclude>
-    <ClInclude Include="src\base\bind_internal_win.h">
       <Filter>src\base</Filter>
     </ClInclude>
     <ClInclude Include="src\base\callback.h">
@@ -4018,6 +4012,9 @@
     <ClCompile Include="src\base\base64.cc">
       <Filter>src\base</Filter>
     </ClCompile>
+    <ClCompile Include="src\base\synchronization\atomic_flag.cc">
+      <Filter>src\base\synchronization</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\base\file_version_info.h">
@@ -4214,6 +4211,9 @@
     </ClInclude>
     <ClInclude Include="src\base\containers\adapters.h">
       <Filter>src\base\containers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base\synchronization\atomic_flag.h">
+      <Filter>src\base\synchronization</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

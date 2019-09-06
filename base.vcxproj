@@ -136,7 +136,6 @@
     <ClInclude Include="src\base\bind.h" />
     <ClInclude Include="src\base\bind_helpers.h" />
     <ClInclude Include="src\base\bind_internal.h" />
-    <ClInclude Include="src\base\bind_internal_win.h" />
     <ClInclude Include="src\base\bits.h" />
     <ClInclude Include="src\base\build_time.h" />
     <ClInclude Include="src\base\callback.h" />
@@ -271,6 +270,7 @@
     <ClInclude Include="src\base\strings\utf_string_conversion_utils.h" />
     <ClInclude Include="src\base\strings\utf_string_conversions.h" />
     <ClInclude Include="src\base\supports_user_data.h" />
+    <ClInclude Include="src\base\synchronization\atomic_flag.h" />
     <ClInclude Include="src\base\synchronization\cancellation_flag.h" />
     <ClInclude Include="src\base\synchronization\condition_variable.h" />
     <ClInclude Include="src\base\synchronization\lock.h" />
@@ -355,7 +355,6 @@
     <ClCompile Include="src\base\base_paths.cc" />
     <ClCompile Include="src\base\base_paths_win.cc" />
     <ClCompile Include="src\base\base_switches.cc" />
-    <ClCompile Include="src\base\bind_helpers.cc" />
     <ClCompile Include="src\base\callback_helpers.cc" />
     <ClCompile Include="src\base\callback_internal.cc" />
     <ClCompile Include="src\base\command_line.cc" />
@@ -438,6 +437,7 @@
     <ClCompile Include="src\base\strings\sys_string_conversions_win.cc" />
     <ClCompile Include="src\base\strings\utf_string_conversion_utils.cc" />
     <ClCompile Include="src\base\strings\utf_string_conversions.cc" />
+    <ClCompile Include="src\base\synchronization\atomic_flag.cc" />
     <ClCompile Include="src\base\synchronization\cancellation_flag.cc" />
     <ClCompile Include="src\base\synchronization\condition_variable_win.cc" />
     <ClCompile Include="src\base\synchronization\lock.cc" />

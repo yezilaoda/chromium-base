@@ -33,7 +33,7 @@ namespace base {
   // Mac and Android.
   bool PathProviderPosix(int key, FilePath* result);
 #endif
-}
+
 
 namespace {
 
@@ -339,3 +339,5 @@ void PathService::DisableCache() {
   path_data->cache.clear();
   path_data->cache_disabled = true;
 }
+
+}  // namespace base

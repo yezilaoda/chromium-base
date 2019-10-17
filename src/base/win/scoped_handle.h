@@ -1,4 +1,4 @@
-// Copyright (c) 2012 The Chromium Authors. All rights reserved.
+﻿// Copyright (c) 2012 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
@@ -135,10 +135,20 @@ class DummyVerifierTraits {
  public:
   typedef HANDLE Handle;
 
-  static void StartTracking(HANDLE handle, const void* owner,
-                            const void* pc1, const void* pc2) {}
-  static void StopTracking(HANDLE handle, const void* owner,
-                           const void* pc1, const void* pc2) {}
+  static void StartTracking(HANDLE handle, const void *owner, const void *pc1, const void *pc2)
+  {
+      UNREFERENCED_PARAMETER(handle);
+      UNREFERENCED_PARAMETER(owner);
+      UNREFERENCED_PARAMETER(pc1);
+      UNREFERENCED_PARAMETER(pc2);
+  }
+  static void StopTracking(HANDLE handle, const void *owner, const void *pc1, const void *pc2)
+  {
+      UNREFERENCED_PARAMETER(handle);
+      UNREFERENCED_PARAMETER(owner);
+      UNREFERENCED_PARAMETER(pc1);
+      UNREFERENCED_PARAMETER(pc2);
+  }
 
  private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(DummyVerifierTraits);

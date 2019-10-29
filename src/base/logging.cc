@@ -602,7 +602,10 @@ LogMessage::~LogMessage() {
     trace.OutputToStream(&stream_);
   }
 #endif
-  stream_ << std::endl;
+  //stream_ << std::endl;
+  if (!EndsWith(stream_.str(),"\r\n",false))
+    stream_ << "\r\n";
+
   std::string str_newline(stream_.str());
 
   // Give any log message handler first dibs on the message.

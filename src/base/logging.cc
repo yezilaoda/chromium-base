@@ -959,19 +959,19 @@ SystemErrorCode GetLastSystemErrorCode() {
 #endif
 }
 
-BASE_EXPORT std::string SystemErrorCodeToString(SystemErrorCode error_code) {
+BASE_EXPORT std::wstring SystemErrorCodeToString(SystemErrorCode error_code) {
 #if defined(OS_WIN)
   const int kErrorMessageBufferSize = 256;
-  char msgbuf[kErrorMessageBufferSize];
+  wchar_t msgbuf[kErrorMessageBufferSize];
   DWORD flags = FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS;
-  DWORD len = FormatMessageA(flags, nullptr, error_code, 0, msgbuf,
+  DWORD len = FormatMessage(flags, nullptr, error_code, 0, msgbuf,
                              base::size(msgbuf), nullptr);
   if (len) {
     // Messages returned by system end with line breaks.
-    return base::CollapseWhitespaceASCII(msgbuf, true) +
-           base::StringPrintf(" (0x%lX)", error_code);
+    return base::CollapseWhitespace(msgbuf, true) +
+           base::StringPrintf(L"(0x%lX)", error_code);
   }
-  return base::StringPrintf("Error (0x%lX) while retrieving error. (0x%lX)",
+  return base::StringPrintf(L"Error (0x%lX) while retrieving error. (0x%lX)",
                             GetLastError(), error_code);
 #elif defined(OS_POSIX) || defined(OS_FUCHSIA)
   return base::safe_strerror(error_code) +

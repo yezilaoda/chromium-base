@@ -1067,7 +1067,7 @@ const LogSeverity LOG_DCHECK = LOG_FATAL;
 	// Alias for ::GetLastError() on Windows and errno on POSIX. Avoids having to
 	// pull in windows.h just for GetLastError() and DWORD.
 	BASE_EXPORT SystemErrorCode GetLastSystemErrorCode();
-	BASE_EXPORT std::string SystemErrorCodeToString(SystemErrorCode error_code);
+	BASE_EXPORT std::wstring SystemErrorCodeToString(SystemErrorCode error_code);
 
 #if defined(OS_WIN)
 	// Appends a formatted system message of the GetLastError() type.
